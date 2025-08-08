@@ -52,8 +52,6 @@
    \begin{center}
       \vspace{6mm}
       {\includegraphics[width=0.35\linewidth]{../figure/uniroma3-logo}} \\
-      \vspace{8mm}
-      {\Large UNIVERSIT\`A DEGLI STUDI ROMA TRE} \\
       \vspace{5mm}
       {\LARGE Dipartimento di Ingegneria Civile, Informatica\\ e delle Tecnologie Aeronautiche} \\
       \vspace{2mm}
@@ -110,5 +108,6 @@
 \renewcommand{\bibliography}[1]{
    \newpage
    \markboth{Bibliografia}{Bibliografia}
-   \OldBib{#1}}
+   \OldBib{#1}
+}
 \bibliographystyle{unsrturl}
