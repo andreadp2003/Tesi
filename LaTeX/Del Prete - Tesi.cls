@@ -77,22 +77,30 @@
    \newpage
    \chapter*{Ringraziamenti}
    \addcontentsline{toc}{chapter}{Ringraziamenti}
-   \input{#1}}
+   \input{#1}
+}
 
 \newcommand{\introduzione}[1]{
    \newpage
    \chapter*{Introduzione}
+   \markboth{Introduzione}{Introduzione}
    \addcontentsline{toc}{chapter}{Introduzione}
-   \input{#1}}
+   \input{#1}
+}
 
 \newcommand{\conclusioni}[1]{
    \newpage
    \chapter*{Conclusioni}
-   \addcontentsline{toc}{chapter}{Conclusioni}}
+   \markboth{Conclusioni}{Conclusioni}
+   \addcontentsline{toc}{chapter}{Conclusioni}
+}
 
 \newcommand{\capitolo}[2]{
    \newpage
-   \chapter{#1}\label{cap:#1}\input{#2}}
+   \chapter{#1}
+   \label{cap:#1}
+   \input{#2}
+}
 
 \newcommand{\generaIndice}{
 	\newpage
@@ -100,10 +108,9 @@
 	\clearpage
 }
 
-% Bibliografia in ordine alfabetico
 \let \OldBib \bibliography
 \renewcommand{\bibliography}[1]{
    \newpage
    \markboth{Bibliografia}{Bibliografia}
    \OldBib{#1}}
-\bibliographystyle{plainurl}
+\bibliographystyle{unsrturl}
