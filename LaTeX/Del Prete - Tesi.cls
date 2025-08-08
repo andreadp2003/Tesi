@@ -95,11 +95,9 @@
    \addcontentsline{toc}{chapter}{Conclusioni}
 }
 
-\newcommand{\capitolo}[2]{
+\newcommand{\capitolo}[1]{
    \newpage
-   \chapter{#1}
-   \label{cap:#1}
-   \input{#2}
+   \input{#1}
 }
 
 \newcommand{\generaIndice}{
