@@ -5,4 +5,7 @@
 *.synctex.gz
 *.fls
 *.fdb_latexmk
+*.bbl
+*.blg
+*.brf
 __latexindent_temp/
