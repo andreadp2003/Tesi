@@ -54,11 +54,11 @@
       {\includegraphics[width=0.35\linewidth]{../figure/uniroma3-logo}} \\
       \vspace{5mm}
       {\LARGE Dipartimento di Ingegneria Civile, Informatica\\ e delle Tecnologie Aeronautiche} \\
-      \vspace{2mm}
+      \vspace{4mm}
       {\Large Corso di Laurea in Ingegneria Informatica} \\
       \vspace{12mm}
-      {\huge \@titolo} \\
-      \vspace{2mm}
+      {\Huge \@titolo} \\
+      \vspace{3mm}
       {\large Anno Accademico \@annoAccademico} \\
       \vspace{12mm}
       {\large Laureando \\ \textbf{\@autore} \\ Matricola \@matricola} \\
@@ -111,3 +111,17 @@
    \OldBib{#1}
 }
 \bibliographystyle{unsrturl}
+
+\RequirePackage[backref=page]{hyperref}
+\renewcommand*{\backref}[1]{}
+\renewcommand*{\backrefalt}[4]{
+   \ifcase #1
+      Nessuna citazione nel testo.
+   \or
+      Citato a pagina~#2.
+   \else
+      Citato alle pagine~#2.
+   \fi
+}
+
+\renewcommand{\printchaptername}{}
