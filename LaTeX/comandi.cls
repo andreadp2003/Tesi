@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
-\ProvidesPackage{Del Prete - Tesi}[2023/11/06 v2.0 Tesi - DIA-Uniroma3]
+\ProvidesPackage{comandi}[2023/11/06 v2.0 Tesi - DIA-Uniroma3]
 
 \LoadClass[a4paper, 12pt, oneside, italian]{memoir}
 
