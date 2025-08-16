@@ -2,3 +2,82 @@
 
 \section{Funzionamento}
 
+MCP è un protocollo open-source che standardizza il modo in cui le applicazioni forniscono contesto agli LLM. Si può pensare a MCP come ad una porta USB-C per le applicazioni IA. Proprio come USB-C fornisce un modo standardizzato per collegare i dispositivi a varie periferiche e accessori, MCP fornisce un modo standardizzato per collegare i modelli IA a diverse fonti di dati e strumenti. MCP consente di creare agenti e flussi di lavoro complessi basati sugli LLM e connette i modelli con il mondo. 
+\cite{modelcontextprotocol2023intro}
+
+Il protocollo MCP include i seguenti progetti:
+\begin{itemize}
+\item Specifiche MCP: una specifica di MCP che delinea i requisiti di implementazione per client e server.
+\item SDK MCP: \textit{Software Development Kit} (SDK) per diversi linguaggi di programmazione che implementano MCP.
+\item Strumenti di sviluppo MCP.
+\item Implementazioni di server MCP di riferimento.
+\end{itemize}
+MCP si concentra esclusivamente sul protocollo per lo scambio di contesto, senza stabilire come le applicazioni IA utilizzino gli LLM o gestiscano il contesto fornito.
+\cite{modelcontextprotocol2023arch}
+
+\subsection{Partecipanti}
+MCP segue un'architettura client-server in cui un host MCP, un'applicazione IA come Claude Code o Claude Desktop, stabilisce connessioni ad uno o più server MCP. L'host MCP realizza questo creando un client MCP per ogni server MCP. Ogni client MCP mantiene una connessione uno-a-uno dedicata con il suo server MCP corrispondente.
+I principali partecipanti all'architettura MCP sono:
+\begin{itemize}
+\item Host MCP: l'applicazione IA che coordina e gestisce uno o più client MCP.
+\item Client MCP: un componente che mantiene una connessione ad un server MCP ed ottiene, da un server MCP, il contesto che l'host MCP può utilizzare.
+\item Server MCP: un programma che fornisce contesto ai client MCP; possono essere eseguiti sia in locale che in remoto.
+\cite{modelcontextprotocol2023arch}
+\end{itemize}
+
+\subsection{Livelli}
+MCP è costituito da due livelli:
+\begin{itemize}
+\item Livello dati: definisce il protocollo, basato su JSON-RPC, per la comunicazione client-server, inclusa la gestione del ciclo di vita e le primitive principali, come strumenti, risorse, prompt e notifiche.
+\item Livello trasporto: definisce i meccanismi e i canali di comunicazione che consentono lo scambio di dati tra client e server, inclusi l'instaurazione di connessioni specifiche per il trasporto, il framing dei messaggi e l'autorizzazione.
+\end{itemize}
+Concettualmente, il livello dati è il livello interno, mentre il livello trasporto è il livello esterno.
+\cite{modelcontextprotocol2023arch}
+
+\subsubsection*{Livello dati}
+Il livello dati implementa un protocollo di scambio basato su JSON-RPC 2.0 che definisce la struttura e la semantica dei messaggi. Questo livello include:
+\begin{itemize}
+\item Gestione del ciclo di vita: gestisce l'inizializzazione della connessione, la negoziazione delle capacità e la terminazione della connessione tra client e server.
+\item Funzionalità del server: consente ai server di fornire funzionalità di base, inclusi strumenti per azioni IA, risorse per dati di contesto e richieste per schemi di interazione da e verso il client.
+\item Funzionalità del client: consente ai server di chiedere al client di campionare dall'LLM, ottenere input dall'utente e registrare messaggi al client.
+\item Funzionalità di utilità: supporta funzionalità aggiuntive come notifiche per aggiornamenti in tempo reale e monitoraggio dei progressi per operazioni di lunga durata.
+\cite{modelcontextprotocol2023arch}
+\end{itemize}
+
+\subsubsection*{Livello di trasporto}
+Il livello di trasporto gestisce i canali di comunicazione e l'autenticazione tra client e server. Gestisce la creazione della connessione, il framing dei messaggi e la comunicazione sicura tra i partecipanti.
+MCP supporta due meccanismi di trasporto:
+\begin{itemize}
+\item \textit{Stdio Transport}: utilizza flussi di input/output standard per la comunicazione diretta tra processi locali sulla stessa macchina, garantendo prestazioni ottimali senza sovraccarico di rete.
+\item \textit{Streamable HTTP transport}: utilizza metodi HTTP POST per i messaggi client-server con eventi inviati dal server opzionali per le funzionalità di streaming. Questo trasporto consente la comunicazione con il server remoto e supporta metodi di autenticazione HTTP standard, inclusi \textit{bearer token}, chiavi API e intestazioni personalizzate.
+\end{itemize}
+MCP consiglia di utilizzare OAuth per ottenere i token di autenticazione.
+Il livello di trasporto astrae i dettagli di comunicazione dal livello di protocollo, consentendo lo stesso formato di messaggio del protocollo JSON-RPC 2.0 su tutti i meccanismi di trasporto.
+\cite{modelcontextprotocol2023arch}
+
+\subsection{Protocollo del livello dati}
+Una parte fondamentale di MCP è la definizione dello schema e della semantica tra client e server MCP. Il livello dati è la parte di MCP che definisce le modalità con cui gli sviluppatori possono condividere il contesto dai server MCP ai client MCP.
+MCP utilizza JSON-RPC 2.0 come protocollo \textit{Remote Procedure Call} (RPC). Client e server si inviano richieste e rispondono di conseguenza. Le notifiche possono essere utilizzate quando non è richiesta alcuna risposta.
+\cite{modelcontextprotocol2023arch}
+
+\subsubsection*{Primitive}
+Le primitive MCP sono il concetto più importante all'interno di MCP. Definiscono ciò che client e server possono offrirsi reciprocamente. Queste primitive specificano i tipi di informazioni contestuali che possono essere condivise con le applicazioni IA e la gamma di azioni che possono essere eseguite.
+MCP definisce tre primitive principali che i server possono esporre:
+\begin{itemize}
+\item \textit{Tools}: funzioni eseguibili che le applicazioni IA possono invocare per eseguire azioni (ad es.: operazioni su file, chiamate API, query di database).
+\item Risorse: fonti di dati che forniscono informazioni contestuali alle applicazioni IA (ad es.: contenuto di file, record di database, risposte API).
+\item Prompt: schemi riutilizzabili che aiutano a strutturare le interazioni con i modelli linguistici (ad es.: prompt di sistema, prompt \textit{few-shot}).
+\end{itemize}
+Ogni tipo di primitiva ha metodi associati per la scoperta (\texttt{*/list}), il recupero (\texttt{*/get}) e, in alcuni casi, l'esecuzione (\texttt{tools/call}). I client MCP utilizzeranno i metodi \texttt{*/list} per scoprire le primitive disponibili. Ad esempio, un client può prima elencare tutti gli strumenti disponibili (\texttt{tools/list}) e poi eseguirli. Questa progettazione consente di creare elenchi dinamici. \\
+Come esempio concreto, si consideri un server MCP che fornisce contesto su un database. Può esporre strumenti per interrogare il database, una risorsa che contiene lo schema del database e un prompt che include esempi di interazione con gli strumenti. \\
+MCP definisce anche le primitive che i client possono esporre. Queste primitive consentono agli autori del server MCP di creare interazioni più ricche.
+\begin{itemize}
+\item Campionamento: consente ai server di richiedere il completamento del modello linguistico dall'applicazione IA del client. Questa funzionalità è utile quando gli autori del server desiderano accedere ad un modello linguistico, ma vogliono rimanere indipendenti dal modello e non includere un SDK del modello linguistico nel proprio server MCP. Possono utilizzare il metodo \texttt{sampling/complete} per richiedere il completamento del modello linguistico dall'applicazione IA del client.
+\item Elicitazione: consente ai server di richiedere informazioni aggiuntive agli utenti. Questa funzionalità è utile quando gli autori del server desiderano ottenere maggiori informazioni dall'utente o chiedere la conferma di un'azione. Possono utilizzare il metodo \texttt{elicitation/request} per richiedere informazioni aggiuntive all'utente.
+\item Logging: consente ai server di inviare messaggi di log ai client a scopo di debug e monitoraggio.
+\cite{modelcontextprotocol2023arch}
+\end{itemize}
+
+\subsubsection*{Notifiche}
+Il protocollo supporta notifiche in tempo reale per abilitare aggiornamenti dinamici tra server e client. Ad esempio, quando gli strumenti disponibili su un server cambiano, come quando vengono rese disponibili nuove funzionalità o vengono modificati strumenti esistenti, il server può inviare notifiche di aggiornamento per informare i client connessi di tali modifiche. Le notifiche vengono inviate come messaggi di notifica JSON-RPC 2.0 (senza attendere una risposta) e consentono ai server MCP di fornire aggiornamenti in tempo reale ai client connessi.
+\cite{modelcontextprotocol2023arch}
