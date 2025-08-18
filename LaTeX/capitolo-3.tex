@@ -1,3 +1,23 @@
 \chapter{Ticket Management System}
 
+Il \textit{Ticket Management System} è un sistema software che ha lo scopo di aiutare gli utenti nella creazione e gestione di ticket, creati per segnalare la presenza di problemi individuati, e nel loro inoltro a degli sviluppatori che possano analizzare e poi risolvere tali problemi. Funzionalità centrale è il fatto che l’utente si interfaccia con un chatbot, nello specifico, un’istanza della risorsa Azure OpenAI che usa il modello GPT-4.1, per usufruire dei servizi offerti del sistema. Entrando nel dettaglio, il sistema è una \textit{C# solution} costituita da:
+\begin{itemize} 
+\item TM.Client.
+\item TM.Shared.
+\item TM.Data.
+\item TM.CQRS. 
+\item TM.Function.
+\end{itemize}
+
+\section{TM.Client}
+Si comporta come il Client MCP menzionato nel capitolo precedente. Si occupa di avviare la comunicazione tra il Server MCP e l’Host MCP. Contiene un’unica classe C# chiamata \texttt{Program.cs}.
+
+\section{TM.Shared}
+Si comporta come l’Host MCP menzionato nel capitolo precedente. Archivia i dati 
+
+\section{TM.Data}
+
+\section{TM.CQRS}
+
+\section{TM.Function}
 
