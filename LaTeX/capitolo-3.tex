@@ -1,23 +1,44 @@
 \chapter{Ticket Management System}
 
-Il \textit{Ticket Management System} � un sistema software che ha lo scopo di aiutare gli utenti nella creazione e gestione di ticket, creati per segnalare la presenza di problemi individuati, e nel loro inoltro a degli sviluppatori che possano analizzare e poi risolvere tali problemi. Funzionalit� centrale � il fatto che l�utente si interfaccia con un chatbot, nello specifico, un�istanza della risorsa Azure OpenAI che usa il modello GPT-4.1, per usufruire dei servizi offerti del sistema. Entrando nel dettaglio, il sistema � una \textit{C# solution} costituita da:
-\begin{itemize} 
-\item TM.Client.
-\item TM.Shared.
-\item TM.Data.
-\item TM.CQRS. 
-\item TM.Function.
+Il \textit{Ticket Management System} è un sistema software che ha lo scopo di aiutare gli utenti nella creazione e gestione di ticket, 
+creati per segnalare la presenza di problemi individuati, e nel loro inoltro a degli sviluppatori che possano analizzare e poi risolvere 
+tali problemi. Funzionalità centrale è il fatto che l'utente si interfaccia con un chatbot, nello specifico, un'istanza della risorsa 
+Azure OpenAI che usa il modello GPT-4.1, per usufruire dei servizi offerti del sistema.
+\\
+Il \textit{Ticket Management System} è stato progettato come una \textit{solution} in C\# suddivisa, secondo un approccio modulare,
+in più progetti indipendenti ma interconnessi. Tale organizzazione riflette i principi delle moderne architetture software a livelli, 
+secondo il principio \textit{Separation of Concerns}, favorendo la manutenibilità e la possibilità di estendere il sistema
+senza introdurre dipendenze circolari o accoppiamenti eccessivamente rigidi.
+\\
+La composizione della solution prevede cinque progetti principali, ciascuno con un ruolo ben definito: \textit{TM.Shared}, \textit{TM.Data},
+\textit{TM.CQRS}, \textit{TM.Function} e \textit{TM.Client}.
+\\
+Il progetto \textit{TM.Shared} definisce tutte le classi degli oggetti che vengono creati internamente nel codice al momento dell'interazione 
+con l'utente. Tali classi sono:
+\begin{itemize}
+    \item \texttt{Ticket}: elemento centrale del sistema; rappresenta i ticket creati dagli utenti, con i relativi \texttt{Comment}, 
+        le \texttt{Task} legate, il \texttt{TicketStatus} e la \texttt{TicketPriority}.
+    \item \texttt{Category}: ogni \texttt{Ticket} appartiene ad una categoria.
+    \item \texttt{Comment}: i \texttt{Ticket} hanno una serie di commenti.
+    \item \texttt{Task}: i task sono le operazioni affidate agli sviluppatori, generati dal sistema a seguito della creazione 
+        di un \texttt{Ticket}. 
+    \item \texttt{User}: gli utenti che usano il sistema; sono intesi anche gli sviluppatori che devono risolvere le \texttt{Task}.
 \end{itemize}
+\\
+Il progetto \textit{TM.Data} ha il compito di gestire la persistenza delle informazioni, fornendo l'accesso al database 
+ed archiviando gli oggetti creati.
+\\
+Il progetto \textit{TM.CQRS} introduce l'implementazione del pattern \textit{Command Query Responsibility Segregation}, un pattern 
+architetturale che separa le operazioni di lettura (\texttt{Queries}) da quelle di scrittura (\texttt{Commands}) all'interno di un'applicazione. 
+\\
+Il cuore della logica applicativa è rappresentato da \textit{TM.Function}. Essa è un'Azure Function, ovvero una soluzione serverless 
+che consente di scrivere meno codice, gestire un'infrastruttura meno complessa e risparmiare sui costi. Non è più necessario preoccuparsi 
+della distribuzione e della gestione dei server, in quanto l'infrastruttura cloud fornisce tutte le risorse aggiornate necessarie per mantenere 
+le applicazioni in esecuzione \cite{azurefunctions_msdocs}. Prende il ruolo dell'MCP Host, l'applicazione IA che gestisce la logica principale del
+Model Context Protocol. Verrà discusso più approfonditamente in seguito. 
+\\
+Infine, \textit{TM.Client} costituisce l'interfaccia utente, nonchè l'MCP Client. Esso contiene la sola classe \texttt{Program.cs}, occupandosi
+di avviare l'intera solution e integrare i vari altri progetti, oltre che inizializzare la comunicazione con il chatbot.
 
-\section{TM.Client}
-Si comporta come il Client MCP menzionato nel capitolo precedente. Si occupa di avviare la comunicazione tra il Server MCP e l�Host MCP. Contiene un�unica classe C# chiamata \texttt{Program.cs}.
-
-\section{TM.Shared}
-Si comporta come l�Host MCP menzionato nel capitolo precedente. Archivia i dati 
-
-\section{TM.Data}
-
-\section{TM.CQRS}
-
-\section{TM.Function}
+\section{Il Model Context Protocol in pratica}
 

@@ -8,6 +8,13 @@
 \annoAccademico{2024/2025}
 
 \usepackage{xurl}
+\usepackage{bookmark}
+
+% Rende "\\" sicuro: se chiamato in vertical mode diventa \par invece di causare "There's no line here to end."
+\makeatletter
+\let\origBackslash\\
+\def\\{\ifvmode\par\else\origBackslash\fi}
+\makeatother
 
 \begin{document}
 
