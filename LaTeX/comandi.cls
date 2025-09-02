@@ -86,11 +86,12 @@
    \input{#1}
 }
 
-\newcommand{\conclusioni}[1]{
+\newcommand{\conclusioni}[2][Conclusioni]{%
    \newpage
-   \chapter*{Conclusioni}
-   \markboth{Conclusioni}{Conclusioni}
-   \addcontentsline{toc}{chapter}{Conclusioni}
+   \chapter*{#1}
+   \markboth{#1}{#1}
+   \addcontentsline{toc}{chapter}{#1}
+   \input{#2}
 }
 
 \newcommand{\capitolo}[1]{
