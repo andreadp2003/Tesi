@@ -24,8 +24,12 @@
 \setsecnumdepth{subsubsection}
 
 \pagestyle{ruled}
-\makeevenhead{ruled}{\textbf{\leftmark}}{}{\textbf{\thepage}}
-\makeoddhead{ruled}{\textbf{\leftmark}}{}{\textbf{\thepage}}
+% intestazioni con titolo (senza numero)
+\makeevenhead{ruled}{\textbf{\leftmark}}{}{}
+\makeoddhead{ruled}{\textbf{\leftmark}}{}{}
+% numero di pagina solo in basso al centro
+\makeevenfoot{ruled}{}{\thepage}{}
+\makeoddfoot{ruled}{}{\thepage}{}
 
 \usepackage{adjustbox}
 
@@ -86,7 +90,7 @@
    \input{#1}
 }
 
-\newcommand{\conclusioni}[2][Conclusioni]{%
+\newcommand{\conclusioni}[2][Conclusioni]{
    \newpage
    \chapter*{#1}
    \markboth{#1}{#1}
