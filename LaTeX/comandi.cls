@@ -78,7 +78,6 @@
 \newcommand{\ringraziamenti}[1]{
    \newpage
    \chapter*{Ringraziamenti}
-   \addcontentsline{toc}{chapter}{Ringraziamenti}
    \input{#1}
 }
 
