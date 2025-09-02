@@ -4,41 +4,101 @@ Il \textit{Ticket Management System} è un'applicazione software che ha lo scopo
 creati per segnalare la presenza di problemi individuati, e nel loro inoltro a degli sviluppatori che possano analizzare e poi risolvere
 tali problemi. Funzionalità centrale dell'applicazione è il fatto che l'utente si interfaccia con un chatbot, un'istanza
 della risorsa Azure OpenAI che usa il modello GPT-4.1 nello specifico, per usufruire dei servizi offerti.
-\\
+
 Il \textit{Ticket Management System} è stato progettato come una \textit{solution} in C\# suddivisa, secondo un approccio modulare,
 in più progetti indipendenti ma interconnessi. Tale organizzazione riflette i principi delle moderne architetture software a livelli,
 secondo il principio \textit{Separation of Concerns}, favorendo la manutenibilità e la possibilità di estendere il sistema
 senza introdurre dipendenze circolari o accoppiamenti eccessivamente rigidi.
-\\
+
 La composizione della solution prevede cinque progetti principali, ciascuno con un ruolo ben definito: \textit{TM.Shared}, \textit{TM.Data},
 \textit{TM.CQRS}, \textit{TM.Function} e \textit{TM.Client}.
-\\
-Il progetto \textit{TM.Shared} definisce tutte le classi degli oggetti che vengono creati internamente nel codice al momento dell'interazione
+
+\newpage
+\section{Progetti nella solution}
+
+\subsection{TM.Shared}
+Il progetto \textit{TM.Shared} definisce tutte le classi degli oggetti che vengono creati internamente nel codice a seguito dell'interazione
 con l'utente. Tali classi sono:
 \begin{itemize}
     \item \texttt{Ticket}: elemento centrale del sistema; rappresenta i ticket creati dagli utenti, con i relativi \texttt{Comment},
         le \texttt{Task} legate, il \texttt{TicketStatus} e la \texttt{TicketPriority}.
     \item \texttt{Category}: ogni \texttt{Ticket} appartiene ad una categoria.
-    \item \texttt{Comment}: i \texttt{Ticket} hanno una serie di commenti.
+    \item \texttt{Comment}: i commenti associati ad un determinato \texttt{Ticket}.
     \item \texttt{Task}: i task sono le operazioni affidate agli sviluppatori, generati dal sistema a seguito della creazione
         di un \texttt{Ticket}.
     \item \texttt{User}: gli utenti che usano il sistema; sono intesi anche gli sviluppatori che devono risolvere le \texttt{Task}.
 \end{itemize}
-\\
+Oltre alle classi però, il progetto definisce per ognuna dei DTO (\textit{Data Transfer Objects}) \cite{microsoft_webapi_ef_part5}.
+I DTO sono classi compatte che assomigliano alle classi originali ma che contengono meno informazioni, solo quelle ritenute necessarie. 
+L'obiettivo è migliorare le performance legate al trasferimento dati tra i diversi sottosistemi, oltre a nascondere alcune logiche interne delle varie classi.
+
+\subsection{TM.Data}
 Il progetto \textit{TM.Data} ha il compito di gestire la persistenza delle informazioni, fornendo l'accesso al database
-ed archiviando gli oggetti creati.
-\\
-Il progetto \textit{TM.CQRS} introduce l'implementazione del pattern \textit{Command Query Responsibility Segregation}, un pattern
-architetturale che separa le operazioni di lettura (\texttt{Queries}) da quelle di scrittura (\texttt{Commands}) all'interno di un'applicazione.
-\\
-Il cuore della logica applicativa è rappresentato da \textit{TM.Function}. Essa è un'Azure Function, ovvero una soluzione serverless
-che consente di scrivere meno codice, gestire un'infrastruttura meno complessa e risparmiare sui costi. Non è più necessario preoccuparsi
-della distribuzione e della gestione dei server, in quanto l'infrastruttura cloud fornisce tutte le risorse aggiornate necessarie per mantenere
-le applicazioni in esecuzione \cite{azurefunctions_msdocs}. Prende il ruolo dell'MCP Host, l'applicazione IA che gestisce la logica principale del
+ed archiviando gli oggetti creati. Il database è archiviato all'interno dell'ambiente cloud \textit{Azure} ed utilizza il linguaggio SQL.
+
+\subsection{TM.CQRS}
+Il progetto \textit{TM.CQRS} introduce l'implementazione del pattern \textit{Command Query Responsibility Segregation} \cite{azure_cqrs_msdocs}.
+Il CQRS è un pattern architetturale che ha lo scopo di isolare le operazioni di lettura (\texttt{Queries}) e di scrittura (\texttt{Commands})
+in un progetto separato, che possono poi essere richiamate da ognuno degli altri progetti per effetturare query sul database.
+
+\subsection{TM.Function}
+Il cuore della logica applicativa è rappresentato da \textit{TM.Function}. Essa è un'\textit{Azure Function}, ovvero una soluzione serverless
+che consente agli sviluppatori di scrivere ed eseguire codice sul cloud in maniera più efficace e compatta, senza dover ricorrere alla 
+creazione di un progetto \cite{azurefunctions_msdocs}. Prende il ruolo dell'MCP Host, l'applicazione IA che gestisce la logica principale del
 Model Context Protocol. Verrà discusso più approfonditamente in seguito.
-\\
+
+\subsection{TM.Client}
 Infine, \textit{TM.Client} costituisce l'interfaccia utente, nonchè l'MCP Client. Esso contiene la sola classe \texttt{Program.cs}, occupandosi
-di avviare l'intera solution e integrare i vari altri progetti, oltre che inizializzare la comunicazione con il chatbot.
+di avviare l'intera solution ed integrare i vari altri progetti, oltre che inizializzare la comunicazione con il chatbot tramite terminale.
 
+\newpage
 \section{Il Model Context Protocol in pratica}
+Nucleo centrale del progetto è la classe \texttt{TicketManagementTools} del progetto TM.Function. Il suo obiettivo è quello di definire una serie
+di \textit{tools} che l'LLM invoca per eseguire le operazioni richieste. Vediamo un esempio:
 
+\begin{scriptsize}
+\begin{verbatim}
+[Function("AggiungiTicket")] 
+public async Task<TicketDtoCreate?> AggiungiTicketAsync(
+    [McpToolTrigger("AggiungiTicket", "Aggiunge un ticket")] ToolInvocationContext context,
+    [McpToolProperty("Ticket", "string", DtoJsonSchemas.TicketDtoCreateSchema)] string ticketDto)
+{
+    var options = new JsonSerializerOptions
+    {
+        PropertyNameCaseInsensitive = true,
+        Converters = { new JsonStringEnumConverter() }
+    };
+
+    var dto = JsonSerializer.Deserialize<TicketDtoCreate>(ticketDto, options);
+    if (dto == null || !dto.IsValid())
+    {
+        return null;
+    }
+
+    var entity = dto.ToEntity();
+    await WriteRepo<Ticket>().AddAsync(entity);
+    await WriteRepo<Ticket>().SaveChangesAsync();
+
+    return dto;
+}
+\end{verbatim}
+\end{scriptsize}
+
+Questo metodo, come si può facilmente dedurre, permette di creare un oggetto \texttt{Ticket} (più precisamente un DTO \texttt{TicketDtoCreate}).
+Caratteristica del Model Context Protocol sono le sue decorazioni: \texttt{McpToolProperty} e \texttt{McpToolTrigger}. Curiosamente, queste
+decorazioni esplicitano i propri dettagli operativi in linguaggio naturale e non in un linguaggio di programmazione, C\# in questo caso.
+Nonostante ciò, l'LLM è in grado di interpretare letteralmente queste istruzioni ed utilizzare correttamente i tool che gli sono posti a
+disposizione.
+
+Da notare l'uso di JSON all'interno del metodo. Per comunicare al chatbot la struttura degli oggetti da creare, gli vengono passati
+degli schemi JSON ai quali l'LLM dev'essere conforme. Nel frammento mostrato, lo schema è fornito tramite \texttt{DtoJsonSchemas.TicketDtoCreateSchema}
+nell'attributo \texttt{McpToolProperty}; questo schema definisce la forma del JSON atteso e permette di vincolare l'output dell'LLM alla struttura prevista.
+
+Il parametro \texttt{ToolInvocationContext} nell'esempio fornisce, come si vede dalla firma, il contesto dell'invocazione dello tool:
+in pratica rappresenta il punto di integrazione tra la chiamata esterna (o generata dall'LLM) e l'implementazione della Function stessa.
+La presenza di tale contesto e delle specifiche in linguaggio naturale nelle decorazioni facilita la correlazione tra le istruzioni fornite al modello
+e le operazioni concrete eseguite dall'host serverless.
+
+Questi elementi insieme mostrano come il Model Context Protocol consenta di esporre funzioni applicative al modello in modo strutturato:
+le descrizioni in linguaggio naturale rendono comprensibili i comportamenti dei tool all'LLM, mentre gli schemi JSON e la logica di validazione
+garantiscono che i dati prodotti rispettino le aspettative del dominio applicativo.

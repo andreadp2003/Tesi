@@ -18,10 +18,10 @@
 \setlrmarginsandblock{3cm}{3cm}{*}
 \checkandfixthelayout
 % profondità dell'indice (settato per stampare fino alle sottosezioni)
-\setcounter{tocdepth}{2}
+\setcounter{tocdepth}{3}
 % numera parti, capitoli, sezioni, sottosezioni e sotto-sottosezioni
-\maxsecnumdepth{subsubsection}
-\setsecnumdepth{subsubsection}
+\maxsecnumdepth{none}
+\setsecnumdepth{none}
 
 \pagestyle{ruled}
 % intestazioni con titolo (senza numero)
