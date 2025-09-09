@@ -5,15 +5,12 @@ TODO: revisione generale
 
 \chapter{Large Language Model - Cosa sono e come funzionano}
 
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.9\textwidth]{../figure/llms-timeline.png}
-    \caption{Cronologia dei principali \textit{Large Language Models} (LLM) sviluppati fino al 2024. 
+\widefigure[t]
+    {../figure/llms-timeline.png}{
+        Cronologia dei principali \textit{Large Language Models} (LLM) sviluppati fino al 2024. 
         Sopra la linea ci sono i modelli open-source, mentre sotto ci sono quelli closed-source.
         \cite{arxiv230706435}
-    }
-    \label{fig:llms-timeline}
-\end{figure}
+    }{fig:llms-timeline}
 
 \section{Introduzione}
 
@@ -68,46 +65,43 @@ Illustriamo ora i concetti fondamentali per comprendere
 la struttura e il funzionamento dei \textit{Large Language Models} (LLM).
 
 \subsection{Panoramica}
-Per capire come funzionano gli LLM è utile seguire il flusso informativo: il testo grezzo viene prima pre-processato e tokenizzato, i token vengono poi trasformati in rappresentazioni numeriche che attraversano una architettura di Transformer basata su meccanismi di attenzione e infine il modello viene addestrato (spesso in modo distribuito). Le diverse scelte in ciascuna di queste fasi (tokenizzazione, qualità dei dati, obiettivo di training, architettura) determinano in gran parte le capacità e i limiti del modello.
+Per capire come funzionano gli LLM è utile seguire il flusso informativo: il testo dell'utente viene prima pre-processato e tokenizzato, 
+i token vengono poi trasformati in rappresentazioni numeriche che attraversano una rete neurale particolare chiamata Transformer, basata 
+su meccanismi di attenzione, e infine il modello viene addestrato (spesso in modo distribuito). Le diverse scelte in ciascuna di queste fasi 
+(tokenizzazione, qualità dei dati, obiettivo di training, architettura) determinano in gran parte le capacità e i limiti del modello.
 
 \subsection{Tokenizzazione e pre-processing dei dati}
-La tokenizzazione spezza il testo in unità elementari chiamate token: possono essere singoli caratteri, sottoparole (subword) o parole complete. Le tecniche comuni (es. \textit{Byte-Pair Encoding}, \textit{SentencePiece}) cercano un compromesso tra un vocabolario piccolo e la capacità di rappresentare parole rare o morfologie complesse. Prima della tokenizzazione si eseguono operazioni di pre-processing: filtraggio della qualità, deduplicazione e rimozione di informazioni sensibili. Un buon pre-processing dei dati riduce inoltre rumore, bias e contenuti non desiderati, migliorando la generalizzazione del modello.
+La tokenizzazione \cite{webster1992tokenization} spezza il testo in unità elementari chiamate token: possono essere singoli caratteri,
+sottoparole \cite{kudo2018subword}, simboli \cite{sennrich2016neural} o parole complete. Le tecniche comuni (es. \textit{Byte-Pair Encoding} \cite{sennrich2016neural}, \textit{SentencePiece}) 
+cercano un compromesso tra un vocabolario piccolo e la capacità di rappresentare parole rare o morfologie complesse. Prima della tokenizzazione 
+si eseguono operazioni di pre-processing: filtraggio della qualità, deduplicazione e rimozione di informazioni sensibili. 
+Un buon pre-processing dei dati riduce inoltre rumore, bias e contenuti non desiderati, migliorando la generalizzazione del modello.
 
 \subsection{Il Transformer: principio e componenti fondamentali}
-Il Transformer è l'architettura alla base degli LLM moderni. Si basa su un principio chiamato \textit{self-attention}: 
+Il Transformer è l'architettura alla base degli LLM moderni. Si basa su un principio chiamato \textit{self-attention} \cite{vaswani2017attention}: 
 nel rappresentare matematicamente i token del prompt, trasformandoli in oggetti chiamati \textit{embeddings}, si tiene conto non solo della parola isolata ma anche dell'intera frase 
 nella quale si trova, aggiungendo così il contesto.
 
 \begin{itemize}
     \item \textbf{\textit{Multi-head attention}}: il modello osserva la frase da più punti di vista contemporaneamente (più "teste") per catturare relazioni diverse, come quelle grammaticali o semantiche.
-    \item \textbf{\textit{Positional encoding}}: poiché l'attenzione è insensibile alla posizione, si aggiunge un segnale posizionale per preservare l'ordine delle parole.
+    \item \textbf{\textit{Positional encoding}} \cite{vaswani2017attention}: poiché l'attenzione è insensibile alla posizione, si aggiunge un segnale posizionale per preservare l'ordine delle parole.
     \item \textbf{\textit{Feed-forward locale}}: dopo l'attenzione, ogni token viene elaborato da una piccola rete indipendente che raffina la sua rappresentazione.
 \end{itemize}
 
-Ci sono diverse tipologie di Transformer:
+Ci sono poi diverse tipologie di Transformer:
 \begin{itemize}
     \item \textbf{\textit{Encoder-decoder}}: due parti separate, una legge l'input (\textit{encoder}) e l'altra genera l'output (\textit{decoder}). Utile per traduzione o riassunti.
     \item \textbf{\textit{Decoder autoregressivo}}: genera una parola alla volta guardando solo le parole già prodotte (utilizzato nei modelli GPT).
     \item \textbf{Architetture ibride}: combinano attenzione bidirezionale e causale per casi specifici.
-    \item \textbf{\textit{Mixture-of-Experts (MoE)}}: il modello ha molti "esperti" specializzati e per ogni input ne attiva solo alcuni, migliorando l'efficienza su larga scala.
-\end{itemize}
-
-\subsection{Obiettivi di pre-training}
-Gli obiettivi di addestramento definiscono cosa il modello apprende:
-\begin{itemize}
-    \item \textbf{\textit{Causal Language Modeling} (CLM)}: prevedere il token successivo (approccio autoregressivo).
-    \item \textbf{\textit{Masked Language Modeling} (MLM)}: ricostruire token volontariamente mascherati (approccio bidirezionale).
-    \item \textbf{Permutation Language Modeling}: il modello predice token in ordine permutato.
-    \item \textbf{\textit{Prefix / Unified objectives}}: combinano modalità diverse per aumentare la flessibilità. La scelta dell'obiettivo influenza l'uso finale: 
-    i modelli autoregressivi sono particolarmente adatti alla generazione libera, mentre i modelli basati su masking risultano efficaci 
-    per rappresentazioni contestuali e compiti di classificazione.
+    \item \textbf{\textit{Mixture-of-Experts (MoE)}}: il modello ha molti "esperti" specializzati e per ogni input ne attiva solo alcuni, 
+    migliorando l'efficienza su larga scala \cite{fedus2022switch}\cite{du2022glam}\cite{ren2023pangu-p}.
 \end{itemize}
 
 \subsection{Leggi di scalabilità e considerazioni pratiche}
-Studi empirici sulle cosiddette \emph{scaling laws} mostrano che le prestazioni migliorano in modo prevedibile all'aumentare del numero dei parametri, 
+Studi empirici sulle cosiddette \textit{scaling laws} mostrano che le prestazioni migliorano in modo prevedibile all'aumentare del numero dei parametri, 
 quantità di dati e risorse computazionali, spesso seguendo relazioni di tipo esponenziali. Tuttavia, aumentare solamente la quantità di dati 
 senza adeguare la capacità del modello o le risorse computazionali non garantisce miglioramenti proporzionali. È quindi fondamentale bilanciare dimensione del modello, 
-qualità e quantità dei dati e budget computazionale per ottenere guadagni effettivi.
+qualità e quantità dei dati e budget computazionale per ottenere guadagni effettivi. \cite{hoffmann2022training} \cite{kaplan2020scaling}
 
 \subsection{Stadi di adattamento: dal pre-training all'uso}
 Il ciclo di vita di un LLM si articola tipicamente in tre fasi principali:
@@ -127,14 +121,15 @@ modella il comportamento finale, mentre tecniche di adattamento e prompting perm
 Il \textbf{\textit{pre-training}} è la fase cruciale che consente ai Large Language Models (LLM) di acquisire conoscenza linguistica generale e capacità di 
 rappresentazione del testo prima di qualsiasi adattamento specifico.
 
-\subsection{Obiettivi del Pre-training}
-Gli LLM vengono addestrati in modo auto-supervisionato su grandi corpus testuali con diversi obiettivi di ottimizzazione:
+\subsection{Obiettivi di pre-training}
+Gli obiettivi di addestramento definiscono cosa il modello apprende:
 \begin{itemize}
-    \item \textbf{Causal Language Modeling (CLM)}: il modello predice il prossimo token dato il contesto precedente. 
-    \item \textbf{Masked Language Modeling (MLM)}: alcuni token vengono mascherati e il modello deve ricostruirli.
-    \item \textbf{Permutation Language Modeling}: il modello predice token in ordine permutato.
-    \item \textbf{Prefix Language Modeling}: viene scelto un prefisso casuale e il modello deve predire i token successivi.
-    \item \textbf{Unified Language Modeling}: combina strategie diverse per aumentare la flessibilità.
+    \item \textbf{\textit{Full Language Modeling}}: al modello viene chiesto di predire i token futuri dati i token precedenti.
+    \item \textbf{\textit{Prefix Language Modeling}}: un prefisso di alcuni token viene scelto casualmente e solo i token rimanenti
+    devono essere previsti dal modello correttamente.
+    \item \textbf{\textit{Masked Language Modeling}}: i token, o gli span (una sequenza di token), vengono mascherati casualmente e al modello 
+    viene chiesto di predire i token mascherati dato il contesto intorno a loro.
+    \cite{wang2022what}
 \end{itemize}
 
 \subsection{Dataset di Addestramento}
@@ -157,15 +152,6 @@ L'addestramento degli LLM pone sfide di tipo computazionale e metodologico:
     \item \textbf{Controllo della qualità}: è necessario implementare filtri e curare la selezione delle fonti.
 \end{itemize}
 
-\subsection{Tendenze Recenti}
-Le ricerche recenti nel pre-training hanno introdotto innovazioni quali:
-\begin{itemize}
-    \item \textbf{Adattamento multilingue}: uso di corpus in centinaia di lingue.
-    \item \textbf{Addestramento multimodale}: integrazione di testo con immagini, audio o codice.
-    \item \textbf{Data Mixture Optimization}: selezione ponderata delle fonti testuali per massimizzare la qualità dell'apprendimento.
-    \item \textbf{Continual Pre-training}: estendere progressivamente le conoscenze aggiornando i modelli con nuovi dati.
-\end{itemize}
-
 \newpage
 \section{Fine-tuning e Adattamento degli LLM}
 
@@ -181,15 +167,16 @@ Consiste nell'addestrare ulteriormente l'LLM su un dataset etichettato per compi
     \item Rischia di causare \textit{catastrophic forgetting}, ossia perdita delle conoscenze generali.
 \end{itemize}
 
-\subsection{Instruction Tuning}
+\subsection{\textit{Instruction Tuning}}
 Gli LLM vengono ottimizzati per comprendere e seguire istruzioni in linguaggio naturale.
 \begin{itemize}
     \item Basato su dataset di tipo \textit{prompt-response}, costruiti manualmente o tramite crowdsourcing.
     \item Introduce la capacità di rispondere in modo coerente a comandi generali senza ulteriori adattamenti.
 \end{itemize}
+\cite{chung2022scaling}
 
-\subsection{Reinforcement Learning from Human Feedback (RLHF)}
-Il \textbf{RLHF} rappresenta una tecnica fondamentale per allineare i modelli alle preferenze umane.
+\subsection{\textit{Reinforcement Learning from Human Feedback (RLHF)}}
+Il \textbf{RLHF} \cite{ziegler2019fine} rappresenta una tecnica fondamentale per allineare i modelli alle preferenze umane.
 \begin{enumerate}
     \item Si raccoglie un dataset di risposte generate dal modello valutate da esseri umani.
     \item Si addestra un \textbf{modello di reward} che impara a prevedere la valutazione di cui prima.
@@ -197,7 +184,7 @@ Il \textbf{RLHF} rappresenta una tecnica fondamentale per allineare i modelli al
 \end{enumerate}
 Questo approccio è stato utilizzato da, ad esempio, ChatGPT.
 
-\subsection{Domain Adaptation}
+\subsection{\textit{Domain Adaptation}}
 Gli LLM possono essere specializzati in domini specifici:
 \begin{itemize}
     \item \textbf{Continued Pre-training}: ulteriore addestramento su corpus specializzati.
@@ -213,16 +200,23 @@ mirano a una maggiore generalizzazione:
     \item \textbf{Meta-apprendimento}: insegnare al modello ad adattarsi rapidamente a nuovi compiti con pochi esempi.
 \end{itemize}
 
-\subsection{Alignment Tuning}
+\subsection{\textit{Alignment Tuning}}
 Per garantire sicurezza, utilità e rispetto delle preferenze etiche, 
 si introducono strategie di \textbf{alignment}:
 \begin{itemize}
     \item \textbf{\textit{Constitutional AI}}: uso di principi predefiniti come linee guida per il comportamento del modello.
-    \item \textbf{\textit{Self-critique e revisione}}: i modelli generano e valutano autonomamente le proprie risposte.
+    \item \textbf{\textit{Self-critique} e revisione}: i modelli generano e valutano autonomamente le proprie risposte.
     \item \textbf{Feedback multimodale}: estensione del RLHF con segnali da immagini, audio o interazioni più complesse.
 \end{itemize}
+\cite{touvron2023llama2}\cite{ouyang2022rlhf}
 
-\newpage
+\widefigure[t]
+    {../figure/llms-stages.png}{
+        \cite{arxiv230706435}
+    }{fig:llms-stages}
+
+\clearpage
+
 \section{Tecniche di Prompting e In-Context Learning}
 
 Dopo il pre-training e l'eventuale fine-tuning, i Large Language Models (LLM) 
@@ -240,7 +234,7 @@ in linguaggio naturale, senza esempi.
 \subsection{Few-shot Prompting e In-Context Learning (ICL)}
 Nel \textbf{few-shot prompting}, al modello vengono forniti alcuni esempi 
 di input-output all'interno del prompt. Consente al modello di inferire lo schema del compito e adattarsi in tempo reale.
-Questo comportamento è noto come \textbf{\textit{in-context learning}} (ICL).
+Questo comportamento è noto come \textbf{\textit{in-context learning}} (ICL) \cite{dong2023survey}.
 
 \subsection{Prompt Engineering}
 La formulazione del prompt influenza drasticamente la qualità delle risposte.
@@ -255,25 +249,25 @@ Sono dunque emerse tecniche sistematiche di \textbf{prompt engineering}:
 Gli LLM possono essere spinti a mostrare capacità di ragionamento tramite prompt opportuni.
 Le tecniche principali sono:
 \begin{itemize}
-    \item \textbf{\textit{Chain-of-Thought} (CoT)}: incoraggia il modello a produrre spiegazioni passo-passo.
-    \item \textbf{\textit{Self-Consistency}}: genera più catene di ragionamento e seleziona la risposta più frequente.
-    \item \textbf{\textit{Tree-of-Thought} (ToT)}: esplora diversi percorsi di ragionamento, con possibilità di backtracking.
+    \item \textbf{\textit{Chain-of-Thought} (CoT)}: incoraggia il modello a produrre spiegazioni passo-passo \cite{wei2022chain}.
+    \item \textbf{\textit{Self-Consistency}}: genera più catene di ragionamento e seleziona la risposta più frequente \cite{wang2022selfconsistency}.
+    \item \textbf{\textit{Tree-of-Thought} (ToT)}: esplora diversi percorsi di ragionamento, con possibilità di backtracking \cite{yao2023tree}.
     \item \textbf{\textit{Generated Knowledge Prompting}}: il modello produce prima conoscenza di supporto, poi la usa per rispondere.
 \end{itemize}
 
 \subsection{Multi-turn Prompting}
 Alcuni compiti complessi richiedono interazioni iterative con il modello.
 \begin{itemize}
-    \item \textbf{Single-turn prompting}: il modello riceve tutte le informazioni in un unico prompt.
-    \item \textbf{Multi-turn prompting}: l'interazione è suddivisa in più turni, 
+    \item \textbf{\textit{Single-turn prompting}}: il modello riceve tutte le informazioni in un unico prompt.
+    \item \textbf{\textit{Multi-turn prompting}}: l'interazione è suddivisa in più turni, 
     con feedback e aggiustamenti progressivi. Questo approccio è alla base degli \textbf{agenti autonomi} basati su LLM.
 \end{itemize}
 
 \subsection{Tecniche Avanzate di Prompting}
 Sono state sviluppate ulteriori strategie per aumentare l'affidabilità:
 \begin{itemize}
-    \item \textbf{Prompt Chaining}: suddividere un compito complesso in più sotto-compiti concatenati.
-    \item \textbf{Automatic Prompt Generation}: generazione automatica di prompt efficaci 
+    \item \textbf{\textit{Prompt Chaining}}: suddividere un compito complesso in più sotto-compiti concatenati.
+    \item \textbf{\textit{Automatic Prompt Generation}}: generazione automatica di prompt efficaci 
     tramite ottimizzazione o meta-modelli.
     \item \textbf{\textit{Retrieval-Augmented Prompting}}: combinazione con sistemi di recupero documentale 
     per fornire contesto aggiornato e ridurre le allucinazioni.
@@ -319,18 +313,18 @@ e si ricorre a giudizi umani:
 \subsection{Benchmark di Comprensione Linguistica}
 Sono stati proposti benchmark standardizzati per valutare capacità di comprensione:
 \begin{itemize}
-    \item \textbf{\textit{GLUE}} e \textbf{\textit{SuperGLUE}}: valutano compiti di classificazione e comprensione testuale.
-    \item \textbf{\textit{SQuAD}}: benchmark per question answering su testi di Wikipedia.
-    \item \textbf{RACE, BoolQ}: valutano comprensione di testi complessi e risposte booleane.
+    \item \textbf{\textit{GLUE}} \cite{wang2018glue} e \textbf{\textit{SuperGLUE}} \cite{wang2019superglue}: valutano compiti di classificazione e comprensione testuale.
+    \item \textbf{\textit{SQuAD}} \cite{rajpurkar2016squad}: benchmark per question answering su testi di Wikipedia.
+    \item \textbf{RACE} \cite{lai2017race}, \textbf{BoolQ} \cite{clark2019boolq}: valutano comprensione di testi complessi e risposte booleane.
 \end{itemize}
 
 \subsection{Benchmark di Ragionamento}
 Per testare capacità di inferenza e ragionamento:
 \begin{itemize}
-    \item \textbf{\textit{MMLU} (Massive Multitask Language Understanding)}: copre centinaia di compiti e discipline.
-    \item \textbf{\textit{BIG-bench}}: insieme di migliaia di task creati da comunità accademica e industriale.
-    \item \textbf{\textit{GSM8K}}: valutazione su problemi matematici di livello scolastico.
-    \item \textbf{\textit{ARC} (AI2 Reasoning Challenge)}: domande scientifiche a scelta multipla.
+    \item \textbf{\textit{MMLU} (Massive Multitask Language Understanding)} \cite{hendrycks2020measuring}: copre centinaia di compiti e discipline.
+    \item \textbf{\textit{BIG-bench}} \cite{srivastava2022beyond}: insieme di migliaia di task creati da comunità accademica e industriale.
+    \item \textbf{\textit{GSM8K}} \cite{cobbe2021training}: valutazione su problemi matematici di livello scolastico.
+    \item \textbf{\textit{ARC} (AI2 Reasoning Challenge)} \cite{clark2018arc}: domande scientifiche a scelta multipla.
 \end{itemize}
 
 \subsection{Benchmark Multilingue e Multimodali}
@@ -338,14 +332,14 @@ Per valutare capacità oltre l'inglese e il puro testo:
 \begin{itemize}
     \item \textbf{\textit{XGLUE}}, \textbf{\textit{XTREME}}: benchmarking multilingue.
     \item \textbf{\textit{MMBench}}, \textbf{\textit{MMMU}}: valutazione multimodale (testo + immagini).
-    \item \textbf{\textit{CodeXGLUE}}, \textbf{\textit{HumanEval}}: benchmarking su programmazione e codice.
+    \item \textbf{\textit{CodeXGLUE}}, \textbf{\textit{HumanEval}} \cite{chen2021evaluating}: benchmarking su programmazione e codice.
 \end{itemize}
 
 \subsection{Valutazione di Sicurezza e Robustezza}
 Un aspetto emergente riguarda la valutazione di rischi e affidabilità:
 \begin{itemize}
-    \item \textbf{Adversarial Testing}: inserimento di prompt avversari per indurre errori.
-    \item \textbf{Red-teaming}: valutazione guidata da esperti per testare rischi etici e di sicurezza.
+    \item \textbf{Adversarial Testing} \cite{wei2023jailbroken}\cite{ganguli2022redteaming}\cite{casper2023explore}\cite{perez2022redwithlm}: inserimento di prompt avversari per indurre errori.
+    \item \textbf{Red-teaming} \cite{wei2023jailbroken}\cite{ganguli2022redteaming}\cite{casper2023explore}\cite{perez2022redwithlm}: valutazione guidata da esperti per testare rischi etici e di sicurezza.
     \item \textbf{Hallucination Benchmarks}: misurano la tendenza del modello a generare informazioni false.
 \end{itemize}
 

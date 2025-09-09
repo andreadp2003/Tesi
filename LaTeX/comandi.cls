@@ -3,10 +3,27 @@
 
 \LoadClass[a4paper, 12pt, oneside, italian]{memoir}
 
-% Si utilizza la sillabazione italiana
 \RequirePackage[italian]{babel}
-% Load graphicx
 \RequirePackage{graphicx}
+\RequirePackage[utf8]{inputenc}
+
+\newlength{\widefigextra}
+\setlength{\widefigextra}{0.2\textwidth}
+
+\newlength{\widefigwidth}
+\setlength{\widefigwidth}{\dimexpr\textwidth + 2\widefigextra\relax}
+
+\newcommand{\widefigure}[4][]{%
+   \begin{figure}[#1]
+   \centering
+   \makebox[\textwidth][c]{%
+      \includegraphics[width=\widefigwidth]{#2}%
+   }%
+   \caption{#3}\label{#4}
+   \end{figure}
+}
+
+%
 % Line spacing
 \RequirePackage{setspace}
 
@@ -58,22 +75,22 @@
 \newcommand{\generaFrontespizio}{
    \thispagestyle{empty}
    \begin{center}
-      \vspace{6mm}
-      {\includegraphics[width=0.35\linewidth]{../figure/uniroma3-logo}} \\
-      \vspace{5mm}
-      {\LARGE Dipartimento di Ingegneria Civile, Informatica\\ e delle Tecnologie Aeronautiche} \\
-      \vspace{4mm}
-      {\Large Corso di Laurea in Ingegneria Informatica} \\
-      \vspace{12mm}
-      {\Huge \@titolo} \\
-      \vspace{3mm}
-      {\large Anno Accademico \@annoAccademico} \\
-      \vspace{12mm}
-      {\large Laureando \\ \textbf{\@autore} \\ Matricola \@matricola} \\
-      \vspace{5mm}
-      {\large Relatore \\ \textbf{\@relatore}} \\
-      \vspace{5mm}
-      {\large Tutor \\ \textbf{\@tutor}} \\
+         \vspace{6mm}
+         {\includegraphics[width=0.35\linewidth]{../figure/uniroma3-logo}} \\
+         \vspace{5mm}
+         {\LARGE Dipartimento di Ingegneria Civile, Informatica\\ e delle Tecnologie Aeronautiche} \\
+         \vspace{4mm}
+         {\Large Corso di Laurea in Ingegneria Informatica} \\
+         \vspace{12mm}
+         {\Huge \@titolo} \\
+         \vspace{3mm}
+         {\large Anno Accademico \@annoAccademico} \\
+         \vspace{12mm}
+         {\large Laureando \\ \textbf{\@autore} \\ Matricola \@matricola} \\
+         \vspace{5mm}
+         {\large Relatore \\ \textbf{\@relatore}} \\
+         \vspace{5mm}
+         {\large Tutor \\ \textbf{\@tutor}} \\
    \end{center}
    \newpage
 }

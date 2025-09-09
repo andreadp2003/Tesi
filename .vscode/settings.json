@@ -1,0 +1,8 @@
+{
+    "latex-workshop.latex.autoBuild.run": "onSave",
+    "latex-workshop.viewer.pdf.autoReload": true,
+    "latex-workshop.latex.watch.usePolling": true,
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    "latex-workshop.latex.outDir": "%DIR%/../Output",
+}
