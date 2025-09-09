@@ -44,7 +44,7 @@ in un progetto separato, che possono poi essere richiamate da ognuno degli altri
 \subsection{TM.Function}
 Il cuore della logica applicativa è rappresentato da \textit{TM.Function}. Essa è un'\textit{Azure Function}, ovvero una soluzione serverless
 che consente agli sviluppatori di scrivere ed eseguire codice sul cloud in maniera più efficace e compatta, senza dover ricorrere alla 
-creazione di un progetto \cite{azurefunctions_msdocs}. Prende il ruolo dell'MCP Host, l'applicazione IA che gestisce la logica principale del
+creazione di un progetto \cite{azurefunctions_msdocs}. Prende il ruolo dell'MCP Server, l'applicazione IA che gestisce la logica principale del
 Model Context Protocol. Verrà discusso più approfonditamente in seguito.
 
 \subsection{TM.Client}
@@ -87,8 +87,7 @@ public async Task<TicketDtoCreate?> AggiungiTicketAsync(
 Questo metodo, come si può facilmente dedurre, permette di creare un oggetto \texttt{Ticket} (più precisamente un DTO \texttt{TicketDtoCreate}).
 Caratteristica del Model Context Protocol sono le sue decorazioni: \texttt{McpToolProperty} e \texttt{McpToolTrigger}. Curiosamente, queste
 decorazioni esplicitano i propri dettagli operativi in linguaggio naturale e non in un linguaggio di programmazione, C\# in questo caso.
-Nonostante ciò, l'LLM è in grado di interpretare letteralmente queste istruzioni ed utilizzare correttamente i tool che gli sono posti a
-disposizione.
+Nonostante ciò, l'LLM è in grado di interpretare alla lettera queste istruzioni ed utilizzare correttamente i tool a sua disposizione.
 
 Da notare l'uso di JSON all'interno del metodo. Per comunicare al chatbot la struttura degli oggetti da creare, gli vengono passati
 degli schemi JSON ai quali l'LLM dev'essere conforme. Nel frammento mostrato, lo schema è fornito tramite \texttt{DtoJsonSchemas.TicketDtoCreateSchema}
@@ -97,7 +96,7 @@ nell'attributo \texttt{McpToolProperty}; questo schema definisce la forma del JS
 Il parametro \texttt{ToolInvocationContext} nell'esempio fornisce, come si vede dalla firma, il contesto dell'invocazione dello tool:
 in pratica rappresenta il punto di integrazione tra la chiamata esterna (o generata dall'LLM) e l'implementazione della Function stessa.
 La presenza di tale contesto e delle specifiche in linguaggio naturale nelle decorazioni facilita la correlazione tra le istruzioni fornite al modello
-e le operazioni concrete eseguite dall'host serverless.
+e le operazioni concrete eseguite dall'applicazione.
 
 Questi elementi insieme mostrano come il Model Context Protocol consenta di esporre funzioni applicative al modello in modo strutturato:
 le descrizioni in linguaggio naturale rendono comprensibili i comportamenti dei tool all'LLM, mentre gli schemi JSON e la logica di validazione
