@@ -32,6 +32,10 @@
 \makeoddfoot{ruled}{}{\thepage}{}
 
 \usepackage{adjustbox}
+\RequirePackage{chngcntr}             % <--- aggiunto: permette \counterwithout
+\counterwithout{figure}{chapter}      % rimuove il reset del contatore figure ad ogni chapter
+\counterwithout{figure}{section}      % rimuove il reset del contatore figure ad ogni section
+\renewcommand{\thefigure}{\arabic{figure}} % numerazione globale: 1,2,3,...
 
 \newcommand{\@annoAccademico}{}
 \newcommand{\annoAccademico}[1]{\renewcommand{\@annoAccademico}{#1}}
