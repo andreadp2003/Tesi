@@ -1,8 +1,24 @@
 {
-    "latex-workshop.latex.autoBuild.run": "onSave",
-    "latex-workshop.viewer.pdf.autoReload": true,
-    "latex-workshop.latex.watch.usePolling": true,
+    "latex-workshop.latex.autoBuild.run": "onFileChange",
     "files.autoSave": "afterDelay",
     "files.autoSaveDelay": 1000,
-    "latex-workshop.latex.outDir": "%DIR%/../Output",
+    "latex-workshop.latex.outDir": "../Output",
+    "latex-workshop.latex.tools": [
+        {
+        "name": "latexmk",
+        "command": "latexmk",
+        "args": [
+            "-pdf",
+            "-synctex=1",
+            "-interaction=nonstopmode",
+            "-outdir=../Output",
+            "-cd",
+            "%DOC%"
+        ]
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+        { "name": "latexmk", "tools": ["latexmk"] }
+    ],
+    "latex-workshop.latex.recipe.default": "latexmk"
 }
