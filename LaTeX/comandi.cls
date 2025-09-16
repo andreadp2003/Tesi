@@ -13,17 +13,19 @@
 \newlength{\widefigwidth}
 \setlength{\widefigwidth}{\dimexpr\textwidth + 2\widefigextra\relax}
 
-\newcommand{\widefigure}[4][]{%
-   \begin{figure}[#1]
+\newcommand{\widefigure}[4][]{
+   \begin{figure}[H] % <--- usa [H] per posizionamento forzato
    \centering
-   \makebox[\textwidth][c]{%
-      \includegraphics[width=\widefigwidth]{#2}%
-   }%
-   \caption{#3}\label{#4}
+   \makebox[\textwidth][c]{
+      \includegraphics[width=\widefigwidth]{#2}
+   }
+   \caption{#3}
+   \label{#4}
    \end{figure}
 }
 
 \RequirePackage{setspace}
+\RequirePackage{float} % <--- aggiunto per [H]
 
 \usepackage[T1]{fontenc}
 
@@ -31,7 +33,7 @@
 \setlrmarginsandblock{3cm}{3cm}{*}
 \checkandfixthelayout
 \setcounter{tocdepth}{3}
-\setcounter{secnumdepth}{3}
+\setcounter{secnumdepth}{-1}
 
 \pagestyle{ruled}
 % intestazioni con titolo (senza numero)
@@ -143,7 +145,7 @@
    colback=black!95!white,
    colframe=black,
    coltext=white,
-   fontupper=\footnotesize\ttfamily, % font più piccolo
+   fontupper=\footnotesize\ttfamily\fontfamily{pcr}\selectfont,
    boxrule=0.5mm,
    arc=1mm,
    left=1mm,

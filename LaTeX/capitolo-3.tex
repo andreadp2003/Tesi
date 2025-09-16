@@ -52,7 +52,7 @@ Infine, \textit{TM.Client} costituisce l'interfaccia utente, nonchè l'MCP Clien
 di avviare l'intera solution ed integrare i vari altri progetti, oltre che inizializzare la comunicazione con il chatbot tramite terminale.
 
 \newpage
-\section{Il Model Context Protocol in pratica}
+\section{L'MCP in pratica}
 Nucleo centrale del progetto è la classe \texttt{TicketManagementTools} del progetto TM.Function. Il suo obiettivo è quello di definire una serie
 di \textit{tools} che l'LLM invoca per eseguire le operazioni richieste. Vediamo un esempio:
 
@@ -101,6 +101,10 @@ e le operazioni concrete eseguite dall'applicazione.
 Questi elementi insieme mostrano come il Model Context Protocol consenta di esporre funzioni applicative al modello in modo strutturato:
 le descrizioni in linguaggio naturale rendono comprensibili i comportamenti dei tool all'LLM, mentre gli schemi JSON e la logica di validazione
 garantiscono che i dati prodotti rispettino le aspettative del dominio applicativo.
+
+\section{Verifica pratica}
+Verifichiamo ora se il sistema effettivamente funziona e se l'LLM è in grado di eseguire le operazioni che gli vengono chieste. Per farlo, effettueremo un
+esempio: gli chiederemo di creare un ticket. Segue una trascrizione dell'interazione avuta con il chatbot.
 
 \begin{windowsconsole}
 Prompt: vorrei creare un ticket\\
@@ -161,3 +165,18 @@ Il ticket "Problema nell'autenticazione" con priorità alta è stato creato nell
 \\
 Se hai bisogno di aggiungere commenti, task, o apportare modifiche al ticket, fammelo sapere!\\
 \end{windowsconsole}
+
+Come si evince dalla conversazione, l'operazione è stata un successo: l'LLM ha correttamente compreso quali sono i parametri dell'oggetto Ticket e ce li ha chiesti in ordine.
+Ha inoltre reperito l'informazione delle categorie già esistenti nel database. Come prova definitiva, accediamo al database sulla piattaforma Azure e osserviamo il contenuto
+della tabella \textit{dbo.Tickets} prima e dopo la conversazione di cui sopra.
+
+\widefigure[t]
+    {../figure/sqldb-before.png}{
+        Prima dell'operazione. Non ci sono ancora ticket.
+    }{fig:sqldb-before}
+
+\widefigure[t]
+    {../figure/sqldb-after.png}{
+        Dopo l'operazione. Il ticket è stato aggiunto.\\
+        Nota: le due date e lo status sono stati generati automaticamente.
+    }{fig:sqldb-after}
