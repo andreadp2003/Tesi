@@ -101,3 +101,63 @@ e le operazioni concrete eseguite dall'applicazione.
 Questi elementi insieme mostrano come il Model Context Protocol consenta di esporre funzioni applicative al modello in modo strutturato:
 le descrizioni in linguaggio naturale rendono comprensibili i comportamenti dei tool all'LLM, mentre gli schemi JSON e la logica di validazione
 garantiscono che i dati prodotti rispettino le aspettative del dominio applicativo.
+
+\begin{windowsconsole}
+Prompt: vorrei creare un ticket\\
+Per creare un ticket ho bisogno di alcune informazioni:\\
+\\
+1. Titolo del ticket\\
+2. Descrizione del problema o richiesta\\
+3. Priorità (Low, Medium, High)\\
+4. Il tuo ID utente (o i tuoi dati se non sei ancora registrato)\\
+5. Categoria del ticket (selezionabile da elenco categorie disponibili)\\
+\\
+Puoi fornirmi queste informazioni? Se non conosci la categoria o il tuo ID utente, posso aiutarti a recuperarli.\\
+Prompt: il titolo è "Problema nell'autenticazione"\\
+Ottimo, hai scelto il titolo "Problema nell'autenticazione".\\
+\\
+Ora ho bisogno delle seguenti informazioni per completare la creazione del ticket:\\
+\\
+1. Descrizione del problema\\
+2. Priorità (Low, Medium, High)\\
+3. Il tuo ID utente (oppure il tuo username/email/nome e cognome per identificarti)\\
+4. Categoria del ticket (se non la conosci, posso mostrarti la lista delle categorie disponibili)\\
+\\
+Per favore, forniscimi questi dettagli.\\
+Prompt: la descrizione è "Ho problemi nell'autenticazione. Non riesco ad inserire username e password nel form."\\
+Perfetto, ho annotato la descrizione:\\
+\\
+"Ho problemi nell'autenticazione. Non riesco ad inserire username e password nel form."\\
+\\
+Mi servono ancora alcune informazioni:\\
+\\
+1. Priorità del ticket (Low, Medium, High)\\
+2. Il tuo ID utente (oppure username/email/nome e cognome, se non conosci l'ID)\\
+3. Categoria del ticket (se non la conosci posso elencare le categorie disponibili)\\
+\\
+Puoi fornirmi questi dettagli? Vuoi che ti mostri le categorie disponibili?\\
+Prompt: priorità alta\\
+Le categorie disponibili sono:\\
+\\
+1. Hardware: Categoria relativa a hardware e dispositivi fisici\\
+2. Software Development: Category for software development related tasks\\
+3. Networking: Categoria relativa alle reti di computer\\
+4. Software Testing: Categoria per attività di testing software\\
+\\
+Quale categoria vuoi assegnare al ticket? Inoltre, puoi fornirmi il tuo ID utente o, se non lo conosci, il tuo username/email/nome e cognome per identificarti?\\
+Prompt: vorrei creare una nuova categoria\\
+Per creare una nuova categoria, ho bisogno di:\\
+\\
+1. Nome della categoria\\
+2. Descrizione della categoria (opzionale, ma consigliata)\\
+\\
+Per favore, forniscimi questi dettagli.\\
+Prompt: "Problemi di autenticazione - Problemi legati all'autenticazione nel sistema"\\
+La nuova categoria "Problemi di autenticazione" è stata creata con successo.\\
+\\
+Ora, per completare il ticket, puoi fornirmi il tuo ID utente oppure il tuo username/email/nome e cognome? In questo modo potrò associare il ticket al tuo profilo.\\
+Prompt: l'username è adelprete\\
+Il ticket "Problema nell'autenticazione" con priorità alta è stato creato nella categoria "Problemi di autenticazione" ed è stato associato al tuo profilo (username: adelprete).\\
+\\
+Se hai bisogno di aggiungere commenti, task, o apportare modifiche al ticket, fammelo sapere!\\
+\end{windowsconsole}

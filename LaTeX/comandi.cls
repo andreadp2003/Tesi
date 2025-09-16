@@ -23,22 +23,15 @@
    \end{figure}
 }
 
-%
-% Line spacing
 \RequirePackage{setspace}
 
-% pacchetti per i font
 \usepackage[T1]{fontenc}
-% interlinea
+
 \linespread{1.4}
-% margini (la dimensione del blocco di testo viene regolata di conseguenza)
 \setlrmarginsandblock{3cm}{3cm}{*}
 \checkandfixthelayout
-% profondità dell'indice (settato per stampare fino alle sottosezioni)
 \setcounter{tocdepth}{3}
-% numera parti, capitoli, sezioni, sottosezioni e sotto-sottosezioni
-\maxsecnumdepth{none}
-\setsecnumdepth{none}
+\setcounter{secnumdepth}{3}
 
 \pagestyle{ruled}
 % intestazioni con titolo (senza numero)
@@ -129,14 +122,6 @@
 	\clearpage
 }
 
-\let \OldBib \bibliography
-\renewcommand{\bibliography}[1]{
-   \newpage
-   \markboth{Bibliografia}{Bibliografia}
-   \OldBib{#1}
-}
-\bibliographystyle{unsrturl}
-
 \RequirePackage[backref=page]{hyperref}
 \renewcommand*{\backref}[1]{}
 \renewcommand*{\backrefalt}[4]{
@@ -150,3 +135,27 @@
 }
 
 \renewcommand{\printchaptername}{}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{listingsutf8,breakable}
+
+\newtcolorbox{windowsconsole}[1][]{%
+   colback=black!95!white,
+   colframe=black,
+   coltext=white,
+   fontupper=\footnotesize\ttfamily, % font più piccolo
+   boxrule=0.5mm,
+   arc=1mm,
+   left=1mm,
+   right=1mm,
+   top=0.5mm,
+   bottom=0.5mm,
+   sharp corners,
+   breakable,           % permette di andare su più pagine
+   listing only,
+   listing options={breaklines=true, basicstyle=\footnotesize\ttfamily}, % va a capo
+   #1
+}
+
+\hbadness=10000    % non segnala più underfull hbox
+\hfuzz=40pt        % ignora overfull hbox
