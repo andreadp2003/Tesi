@@ -22,8 +22,8 @@ con l'utente. Tali classi sono:
 \begin{itemize}
     \item \texttt{Ticket}: elemento centrale del sistema; rappresenta i ticket creati dagli utenti, con i relativi \texttt{Comment},
         le \texttt{Task} legate, il \texttt{TicketStatus} e la \texttt{TicketPriority}.
-    \item \texttt{Category}: ogni \texttt{Ticket} appartiene ad una categoria.
-    \item \texttt{Comment}: i commenti associati ad un determinato \texttt{Ticket}.
+    \item \texttt{Category}: ogni \texttt{Ticket} appartiene a una categoria.
+    \item \texttt{Comment}: i commenti associati a un determinato \texttt{Ticket}.
     \item \texttt{Task}: i task sono le operazioni affidate agli sviluppatori, generati dal sistema a seguito della creazione
         di un \texttt{Ticket}.
     \item \texttt{User}: gli utenti che usano il sistema; sono intesi anche gli sviluppatori che devono risolvere le \texttt{Task}.
@@ -43,7 +43,7 @@ in un progetto separato, che possono poi essere richiamate da ognuno degli altri
 
 \subsection{TM.Function}
 Il cuore della logica applicativa è rappresentato da \textit{TM.Function}. Essa è un'\textit{Azure Function}, ovvero una soluzione serverless
-che consente agli sviluppatori di scrivere ed eseguire codice sul cloud in maniera più efficace e compatta, senza dover ricorrere alla 
+che consente agli sviluppatori di scrivere e eseguire codice sul cloud in maniera più efficace e compatta, senza dover ricorrere alla 
 creazione di un progetto \cite{azurefunctions_msdocs}. Prende il ruolo dell'MCP Server, l'applicazione IA che gestisce la logica principale del
 Model Context Protocol. Verrà discusso più approfonditamente in seguito.
 
@@ -87,7 +87,7 @@ public async Task<TicketDtoCreate?> AggiungiTicketAsync(
 Questo metodo, come si può facilmente dedurre, permette di creare un oggetto \texttt{Ticket} (più precisamente un DTO \texttt{TicketDtoCreate}).
 Caratteristica del Model Context Protocol sono le sue decorazioni: \texttt{McpToolProperty} e \texttt{McpToolTrigger}. Curiosamente, queste
 decorazioni esplicitano i propri dettagli operativi in linguaggio naturale e non in un linguaggio di programmazione, C\# in questo caso.
-Nonostante ciò, l'LLM è in grado di interpretare alla lettera queste istruzioni ed utilizzare correttamente i tool a sua disposizione.
+Nonostante ciò, l'LLM è in grado di interpretare alla lettera queste istruzioni e utilizzare correttamente i tool a sua disposizione.
 
 Da notare l'uso di JSON all'interno del metodo. Per comunicare al chatbot la struttura degli oggetti da creare, gli vengono passati
 degli schemi JSON ai quali l'LLM dev'essere conforme. Nel frammento mostrato, lo schema è fornito tramite \texttt{DtoJsonSchemas.TicketDtoCreateSchema}

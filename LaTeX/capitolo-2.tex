@@ -2,7 +2,7 @@
 
 \section{Funzionamento}
 
-MCP è un protocollo open-source che standardizza il modo in cui le applicazioni forniscono contesto agli LLM. Si può pensare a MCP come ad una porta USB-C per le applicazioni IA. Proprio come USB-C fornisce un modo standardizzato per collegare i dispositivi a varie periferiche e accessori, MCP fornisce un modo standardizzato per collegare i modelli IA a diverse fonti di dati e strumenti. MCP consente di creare agenti e flussi di lavoro complessi basati sugli LLM e connette i modelli con il mondo. 
+MCP è un protocollo open-source che standardizza il modo in cui le applicazioni forniscono contesto agli LLM. Si può pensare a MCP come a una porta USB-C per le applicazioni IA. Proprio come USB-C fornisce un modo standardizzato per collegare i dispositivi a varie periferiche e accessori, MCP fornisce un modo standardizzato per collegare i modelli IA a diverse fonti di dati e strumenti. MCP consente di creare agenti e flussi di lavoro complessi basati sugli LLM e connette i modelli con il mondo. 
 \cite{modelcontextprotocol2024intro}
 
 Il protocollo MCP include i seguenti progetti:
@@ -20,7 +20,7 @@ MCP segue un'architettura client-server in cui un host MCP, un'applicazione IA c
 I principali partecipanti all'architettura MCP sono:
 \begin{itemize}
 \item Host MCP: l'applicazione IA che coordina e gestisce uno o più client MCP.
-\item Client MCP: un componente che mantiene una connessione ad un server MCP ed ottiene, da un server MCP, il contesto che l'host MCP può utilizzare.
+\item Client MCP: un componente che mantiene una connessione a un server MCP ed ottiene, da un server MCP, il contesto che l'host MCP può utilizzare.
 \item Server MCP: un programma che fornisce contesto ai client MCP; possono essere eseguiti sia in locale che in remoto.
 \cite{modelcontextprotocol2024arch}
 \end{itemize}
@@ -72,7 +72,7 @@ Ogni tipo di primitiva ha metodi associati per la scoperta (\texttt{*/list}), il
 Come esempio concreto, si consideri un server MCP che fornisce contesto su un database. Può esporre strumenti per interrogare il database, una risorsa che contiene lo schema del database e un prompt che include esempi di interazione con gli strumenti. \\
 MCP definisce anche le primitive che i client possono esporre. Queste primitive consentono agli autori del server MCP di creare interazioni più ricche.
 \begin{itemize}
-\item Campionamento: consente ai server di richiedere il completamento del modello linguistico dall'applicazione IA del client. Questa funzionalità è utile quando gli autori del server desiderano accedere ad un modello linguistico, ma vogliono rimanere indipendenti dal modello e non includere un SDK del modello linguistico nel proprio server MCP. Possono utilizzare il metodo \texttt{sampling/complete} per richiedere il completamento del modello linguistico dall'applicazione IA del client.
+\item Campionamento: consente ai server di richiedere il completamento del modello linguistico dall'applicazione IA del client. Questa funzionalità è utile quando gli autori del server desiderano accedere a un modello linguistico, ma vogliono rimanere indipendenti dal modello e non includere un SDK del modello linguistico nel proprio server MCP. Possono utilizzare il metodo \texttt{sampling/complete} per richiedere il completamento del modello linguistico dall'applicazione IA del client.
 \item Elicitazione: consente ai server di richiedere informazioni aggiuntive agli utenti. Questa funzionalità è utile quando gli autori del server desiderano ottenere maggiori informazioni dall'utente o chiedere la conferma di un'azione. Possono utilizzare il metodo \texttt{elicitation/request} per richiedere informazioni aggiuntive all'utente.
 \item Logging: consente ai server di inviare messaggi di log ai client a scopo di debug e monitoraggio.
 \cite{modelcontextprotocol2024arch}
