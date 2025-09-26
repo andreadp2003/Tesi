@@ -13,11 +13,12 @@
 \newlength{\widefigwidth}
 \setlength{\widefigwidth}{\dimexpr\textwidth + 2\widefigextra\relax}
 
-\newcommand{\widefigure}[4][]{
-   \begin{figure}[H] % <--- usa [H] per posizionamento forzato
+\usepackage{xparse}
+\NewDocumentCommand{\widefigure}{O{\widefigwidth} m m m}{%
+   \begin{figure}[H]
    \centering
-   \makebox[\textwidth][c]{
-      \includegraphics[width=\widefigwidth]{#2}
+   \makebox[\textwidth][c]{%
+      \includegraphics[width=#1]{#2}
    }
    \caption{#3}
    \label{#4}
