@@ -34,7 +34,7 @@
 \setlrmarginsandblock{3cm}{3cm}{*}
 \checkandfixthelayout
 \setcounter{tocdepth}{3}
-\setcounter{secnumdepth}{-1}
+\setcounter{secnumdepth}{2}
 
 \pagestyle{ruled}
 % intestazioni con titolo (senza numero)
