@@ -18,7 +18,7 @@ La composizione della solution prevede cinque progetti principali, ciascuno con 
 In una prima bozza del progetto, l'LLM scelto per comunicare con l'utente era Claude Sonnet. Il progetto era stato configurato per rendere visibile i suoi
 tools all'applicazione Claude Desktop, cosicché potesse essere utilizzato direttamente all'interno del software in questione. La bozza ha avuto successo, ma
 essendo la solution pensata per essere integrata nell'ambiente cloud di Microsoft Azure, era indispensabile un differente LLM, uno in particolare che non fosse
-limitato ad un programma esterno. \\
+limitato a un programma esterno. \\
 È per questo che è stato scelto un chatbot interno all'ambiente Azure, ossia una risorsa Azure OpenAI \cite{azure_openai_foundry}, che mette a disposizione
 una serie di modelli proprietari di OpenAI, tra cui GPT-4.1, che è quello che è stato infine scelto per il progetto definitivo.
 
@@ -30,7 +30,7 @@ Il progetto \textit{TM.Shared} definisce tutte le classi degli oggetti che vengo
 con l'utente. Tali classi sono:
 \begin{itemize}
     \item \texttt{Ticket}: elemento centrale del sistema; rappresenta i ticket creati dagli utenti, con i relativi \texttt{Comment},
-        le \texttt{Task} ad esso legate, il \texttt{TicketStatus} e la \texttt{TicketPriority}.
+        le \texttt{Task} a esso legate, il \texttt{TicketStatus} e la \texttt{TicketPriority}.
     \item \texttt{Category}: ogni \texttt{Ticket} appartiene a una categoria.
     \item \texttt{Comment}: i commenti associati a un determinato \texttt{Ticket}.
     \item \texttt{Task}: i task sono le operazioni affidate agli sviluppatori, generati dal sistema a seguito della creazione
@@ -43,25 +43,25 @@ L'obiettivo è migliorare le performance legate al trasferimento dati tra i dive
 
 \subsection{TM.Data}
 Il progetto \textit{TM.Data} ha il compito di gestire la persistenza delle informazioni, fornendo l'accesso al database
-ed archiviando gli oggetti creati. Il database è archiviato all'interno dell'ambiente cloud Azure ed utilizza il linguaggio SQL.
+ed archiviando gli oggetti creati. Il database è archiviato all'interno dell'ambiente cloud Azure e utilizza il linguaggio SQL.
 
 \subsection{TM.CQRS}
 Il progetto \textit{TM.CQRS} introduce l'implementazione del pattern \textit{Command Query Responsibility Segregation} \cite{azure_cqrs_msdocs}.
 Il CQRS è un pattern architetturale che ha lo scopo di isolare le operazioni di lettura (\texttt{Queries}) e di scrittura (\texttt{Commands})
-del database in un progetto separato, che possono poi essere richiamate da ognuno degli altri progetti per effetturare le interrogazioni.
+del database in un progetto separato, che possono poi essere richiamate da ognuno degli altri progetti per effettuare le interrogazioni.
 
 \subsection{TM.Function}
 Il cuore della logica applicativa è rappresentato da \textit{TM.Function}. Essa è un'\textit{Azure Function}, ovvero una soluzione serverless
-che consente agli sviluppatori di scrivere e eseguire codice sul cloud in maniera più efficace e compatta, senza dover ricorrere alla
+che consente agli sviluppatori di scrivere ed eseguire codice sul cloud in maniera più efficace e compatta, senza dover ricorrere alla
 creazione di un progetto \cite{azurefunctions_msdocs}. Prende il ruolo dell'MCP Server, l'applicazione IA che gestisce la logica principale del
 Model Context Protocol. Verrà discusso più approfonditamente in seguito.
 
 \subsection{TM.Client}
-Infine, \textit{TM.Client} costituisce l'interfaccia utente, nonchè l'MCP Client. Esso contiene la sola classe \texttt{Program.cs}, occupandosi
-di avviare l'intera solution ed integrare i vari altri progetti, oltre che inizializzare la comunicazione con il chatbot tramite terminale.
+Infine, \textit{TM.Client} costituisce l'interfaccia utente, nonché l'MCP Client. Esso contiene la sola classe \texttt{Program.cs}, occupandosi
+di avviare l'intera solution e integrare i vari altri progetti, oltre che inizializzare la comunicazione con il chatbot tramite terminale.
 
 \newpage
-\section{Il Model Content Protocol in pratica}
+\section{Il Model Context Protocol in pratica}
 Nucleo centrale del progetto è la classe \texttt{TicketManagementTools} del progetto TM.Function. Il suo obiettivo è quello di definire una serie
 di \textit{tools} che l'LLM invoca per eseguire le operazioni richieste. Vediamo un esempio:
 
@@ -78,16 +78,16 @@ public async Task<TicketDtoCreate?> AggiungiTicketAsync(
 \end{scriptsize}
 
 Questo metodo, come si può facilmente dedurre, permette di creare un oggetto \texttt{Ticket} (più precisamente un DTO \texttt{TicketDtoCreate}).
-Caratteristica del Model Context Protocol sono le decorazioni dei metodi che fornisce: \texttt{McpToolProperty} e \texttt{McpToolTrigger}. Esse esplicitano i propri
-dettagli operativi in linguaggio naturale invece che in un linguaggio di programmazione, permettendo all'LLM di interpretare queste istruzioni
-e capire quali dei tool a sua disposizione utilizzare.
+Caratteristica del Model Context Protocol sono le decorazioni dei metodi fornite dal protocollo: \texttt{McpToolProperty} e \texttt{McpToolTrigger}. 
+Esse esplicitano i propri dettagli operativi in linguaggio naturale invece che in un linguaggio di programmazione, permettendo all'LLM di interpretare 
+queste istruzioni e capire quali dei tool a sua disposizione utilizzare.
 
-Da notare l'uso di JSON all'interno del metodo: per comunicare all'LLM la struttura degli oggetti da creare, vengono forniti in input
+Si osservi l'utilizzo di JSON all'interno del metodo: per comunicare all'LLM la struttura degli oggetti da creare, vengono forniti in input
 gli schemi JSON degli oggetti in questione. Nel frammento mostrato, lo schema è fornito tramite \texttt{DtoJsonSchemas.TicketDtoCreateSchema}
 nell'attributo \texttt{McpToolProperty}.
 
 Il parametro \texttt{ToolInvocationContext} nell'esempio fornisce il contesto dell'invocazione del tool:
-in pratica rappresenta il punto di integrazione tra la chiamata esterna (o generata dall'LLM) e l'implementazione del metodo.
+rappresenta il punto di integrazione tra la chiamata esterna (o generata dall'LLM) e l'implementazione del metodo.
 La presenza di tale contesto e delle specifiche in linguaggio naturale nelle decorazioni facilita la correlazione tra le istruzioni fornite al modello
 e le operazioni concrete eseguite dall'applicazione.
 
@@ -103,7 +103,7 @@ Per verificare il corretto funzionamento del sistema software si può procedere 
     \item verificare che tali oggetti vengano effettivamente creati all'interno del database nell'ambiente cloud Azure di cui prima.
 \end{itemize}
 Segue una trascrizione di un'interazione avuta con il chatbot volta a mettere in atto questi passaggi. \\
-N.B.: ciò che segue la scritta \texttt{Prompt:} è ciò che scrive l'utente, mentre il resto è la risposta generata dall'LLM.
+Nota: ciò che segue la scritta \texttt{Prompt:} è ciò che scrive l'utente, mentre il resto è la risposta generata dall'LLM.
 
 \begin{windowsconsole}
 Prompt: vorrei creare un ticket\\
@@ -172,7 +172,8 @@ già esistente, l'LLM temporaneamente sospende la creazione del ticket per soddi
 di ritenere informazioni da poter usare in un secondo momento e di poter passare da un compito all'altro in modo fluido.
 
 \newpage
-Come prova definitiva, accediamo al database sulla piattaforma Azure e osserviamo il contenuto della tabella \textit{dbo.Tickets} prima e dopo la conversazione di cui sopra.
+Come prova definitiva, seguono due screenshot del database sulla piattaforma Azure per osservare il contenuto della tabella \textit{dbo.Tickets} 
+prima e dopo la conversazione di cui sopra.
 
 \widefigure[\textwidth]
     {../figure/sqldb-before.png}{
@@ -182,7 +183,7 @@ Come prova definitiva, accediamo al database sulla piattaforma Azure e osserviam
 \widefigure[\textwidth]
     {../figure/sqldb-after.png}{
         Dopo l'operazione. Il ticket è stato aggiunto.\\
-        N.B.: le due date e lo status sono stati generati automaticamente.
+        Nota: le due date e lo status sono stati generati automaticamente.
     }{fig:sqldb-after}
 
 \newpage

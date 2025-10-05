@@ -14,8 +14,8 @@ sia come interfaccia per interagire con le macchine. Lo sviluppo di modelli ling
 della ricerca in \textit{Natural Language Processing} (NLP).
 
 Storicamente, si è passati da approcci statistici (basati su n-grammi e modelli probabilistici), a modelli neurali, con una struttura ispirata
-a quella del cervello, fino ai modelli pre-addestrati (\textit{Pre-trained Language Models}, PLM).
-Quest'ultimi, addestrati su grandi corpus testuali, hanno introdotto il concetto di rappresentazioni generali del linguaggio,
+a quella del cervello, fino ai modelli linguistici pre-addestrati (\textit{Pre-trained Language Models}, PLM).
+Questi ultimi, addestrati su grandi corpus testuali, hanno introdotto il concetto di rappresentazioni generali del linguaggio,
 successivamente adattabili tramite \textit{fine-tuning} a specifici compiti \cite{devlin2019bert}\cite{peters2018elmo}\cite{lewis2019bart}.
 
 Un punto di svolta è stato l'introduzione dei \textbf{\textit{Transformer}} \cite{chernyavskiy2021transformers},
@@ -30,10 +30,10 @@ Illustriamo ora i concetti fondamentali per comprendere
 la struttura e il funzionamento dei \textit{Large Language Models} (LLM).
 
 \subsection{Panoramica}
-Il testo dell'utente, il cosiddetto \textit{prompt}, viene prima pre-processato e ridotto in \textit{token}, ossia diviso in frammenti più piccoli,
+Il testo dell'utente, il cosiddetto \textit{prompt}, viene prima pre-processato e ridotto in \textit{token}, ossia frammenti più piccoli,
 i quali vengono poi trasformati in rappresentazioni numeriche che attraversano una rete neurale particolare chiamata Transformer, basata
 su meccanismi di attenzione, che restituisce un singolo token, che viene poi riconvertito in una parola. Il testo iniziale con l'aggiunta del token
-generato viene poi dato in input all'LLM per generare un nuovo token e così via. Infine il modello viene addestrato, cioè i suoi parametri vengono
+generato viene poi dato in input all'LLM per generare un nuovo token e così via. Infine, il modello viene addestrato, cioè i suoi parametri vengono
 strategicamente modificati, per generare risposte sensate e coerenti.
 Le diverse scelte in ciascuna di queste fasi (tokenizzazione, qualità dei dati, obiettivo di training, architettura)
 determinano in gran parte le capacità e i limiti del modello.
@@ -110,9 +110,9 @@ Dopo il pre-training, gli LLM vengono tipicamente sottoposti a una fase di adatt
 ne migliora l'allineamento con le intenzioni umane.
 
 \subsection{\textit{Supervised Fine-tuning}}
-Consiste nell'addestrare ulteriormente l'LLM su un dataset etichettato per compiti specifici (es. traduzione, classificazione, QA).
+Consiste nell'addestrare ulteriormente l'LLM su un dataset etichettato per compiti specifici (e.g. traduzione, classificazione, QA).
 \begin{itemize}
-    \item Viene usato per adattare un modello generalista a un dominio ristretto (es. medicina, diritto).
+    \item Viene usato per adattare un modello generalista a un dominio ristretto (e.g. medicina, diritto).
     \item Può essere effettuato con dataset relativamente piccoli rispetto al pre-training.
     \item Rischia di causare \textit{catastrophic forgetting}, ossia perdita delle conoscenze generali.
 \end{itemize}
@@ -178,7 +178,7 @@ Sono dunque emerse tecniche sistematiche di \textbf{prompt engineering}:
 \begin{itemize}
     \item \textbf{Instruction-style prompts}: forniscono istruzioni chiare e contestualizzate.
     \item \textbf{Template-based prompting}: utilizzo di schemi predefiniti per generare input coerenti.
-    \item \textbf{Role prompting}: assegnazione di un “ruolo” al modello (es. “Sei un medico con decenni di esperienza…”).
+    \item \textbf{Role prompting}: assegnazione di un "ruolo" al modello (e.g. "Sei un medico con decenni di esperienza…").
 \end{itemize}
 
 \subsection{Prompting per il Ragionamento}
@@ -211,8 +211,7 @@ Sono state sviluppate ulteriori strategie per aumentare l'affidabilità:
 
 \newpage
 \section{Applicazioni}
-
-Gli \textbf{Large Language Models} (LLM) hanno trovato applicazioni in un'ampia gamma di domini, 
+I \textbf{Large Language Models} (LLM) hanno trovato applicazioni in un'ampia gamma di domini, 
 dalla generazione di linguaggio naturale alla programmazione, 
 dalla ricerca scientifica alla medicina. 
 Questo capitolo presenta le principali aree di utilizzo e gli scenari emergenti.
@@ -295,7 +294,7 @@ Un campo emergente riguarda l'integrazione degli LLM in agenti autonomi:
 \end{itemize}
 
 \newpage
-\section{Sfide, Limitazioni ed Aspetti Etici}
+\section{Sfide, Limitazioni e Aspetti Etici}
 
 Nonostante i notevoli progressi, gli LLM presentano ancora
 numerose sfide tecniche, limitazioni pratiche e rischi etici.
@@ -307,16 +306,16 @@ Gli LLM spesso generano contenuti plausibili ma falsi, un fenomeno noto come \te
 Possono inventare dati, riferimenti bibliografici o fatti storici inesistenti. Ciò riduce l'affidabilità in contesti critici 
 come medicina, diritto o scienza. Tecniche come \textit{\textit{retrieval-augmented generation}} (RAG) sono state proposte per mitigare questo problema.
 
-\subsection{Bias e Equità}
+\subsection{Bias ed Equità}
 Gli LLM ereditano i bias presenti nei dati di addestramento.
 \begin{itemize}
     \item Riproducono stereotipi di genere, etnia, religione, orientamento sessuale.
     \item Possono amplificare discriminazioni già esistenti nella società.
 \end{itemize}
-Sono in corso ricerche su dataset bilanciati e metodi di de-biasing.
+Sono in corso ricerche su dataset bilanciati e metodi per eliminare i bias.
 
 \subsection{Sicurezza e Abusi Potenziali}
-Gli LLM possono essere usati impropriamente per generare contenuti dannosi.
+Gli LLM possono essere impiegati impropriamente per generare contenuti dannosi.
 \begin{itemize}
     \item \textbf{Disinformazione}: generazione automatica di fake news e propaganda.
     \item \textbf{Cybersecurity}: creazione di codice malevolo o phishing su larga scala.
@@ -345,7 +344,7 @@ Gli LLM di punta sono sviluppati principalmente da grandi aziende tecnologiche.
     \item L'alto costo computazionale limita la ricerca accademica indipendente.
     \item Si rischia una concentrazione di potere e conoscenza in poche mani.
 \end{itemize}
-Iniziative open-source (es. \textit{LLaMA}, \textit{Falcon}, \textit{MPT}) cercano di democratizzare l'accesso.
+Iniziative open-source (e.g. \textit{LLaMA}, \textit{Falcon}, \textit{MPT}) cercano di democratizzare l'accesso.
 
 \subsection{Allineamento con Valori Umani}
 Un'altra sfida riguarda l'\textbf{alignment} con preferenze etiche e valori umani.
@@ -374,7 +373,7 @@ saranno più rilevanti.
 Questo capitolo discute le prospettive principali.
 
 \subsection{Efficienza e Sostenibilità}
-Una priorità sarà lo sviluppo di modelli più efficienti dal punto di vista computazionale e energetico.
+Una priorità sarà lo sviluppo di modelli più efficienti dal punto di vista computazionale ed energetico.
 \begin{itemize}
     \item Tecniche di compressione (quantizzazione, pruning, distillazione) sempre più sofisticate.
     \item Architetture ibride che combinano Transformer con nuovi meccanismi di attenzione.
@@ -395,7 +394,7 @@ Attualmente gli LLM hanno memoria limitata alla finestra contestuale.
 \begin{itemize}
     \item Ricerca su architetture con memoria esterna persistente.
     \item Meccanismi per richiamare informazioni apprese in sessioni precedenti.
-    \item Possibilità di modelli che accumulano conoscenza nel tempo, riducendo la necessità di retraining massivo.
+    \item Possibilità di modelli che accumulano conoscenza nel tempo, riducendo la necessità di addestrarli di nuovo in modo completo.
 \end{itemize}
 
 \subsection{Autonomia e Agenti Intelligenti}
@@ -411,14 +410,14 @@ La comunità scientifica riconosce la necessità di modelli più trasparenti:
 \begin{itemize}
     \item Strumenti di \textbf{explainable AI} per comprendere le decisioni interne.
     \item Analisi delle rappresentazioni neurali per capire l'emergere delle abilità.
-    \item Tecniche di controllo fine-grained per modulare il comportamento del modello.
+    \item Tecniche di controllo \textit{fine-grained} per modulare il comportamento del modello.
 \end{itemize}
 
 \subsection{Sicurezza e Robustezza}
 Un'altra direzione riguarda la costruzione di LLM affidabili e sicuri:
 \begin{itemize}
-    \item Difese contro attacchi avversari e prompt injection.
-    \item Riduzione delle allucinazioni tramite retrieval e grounding su basi di conoscenza.
+    \item Difese contro attacchi avversari e \textit{prompt injection}.
+    \item Riduzione delle allucinazioni.
     \item Maggiore robustezza a input rumorosi o manipolati.
 \end{itemize}
 

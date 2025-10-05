@@ -37,10 +37,8 @@
 \setcounter{secnumdepth}{2}
 
 \pagestyle{ruled}
-% intestazioni con titolo (senza numero)
 \makeevenhead{ruled}{\textbf{\leftmark}}{}{}
 \makeoddhead{ruled}{\textbf{\leftmark}}{}{}
-% numero di pagina solo in basso al centro
 \makeevenfoot{ruled}{}{\thepage}{}
 \makeoddfoot{ruled}{}{\thepage}{}
 
@@ -70,6 +68,7 @@
 
 \newcommand{\generaFrontespizio}{
    \thispagestyle{empty}
+   \vfill
    \begin{center}
          \vspace{6mm}
          {\includegraphics[width=0.35\linewidth]{../figure/uniroma3-logo}} \\
@@ -81,13 +80,14 @@
          {\Huge \@titolo} \\
          \vspace{3mm}
          {\large Anno Accademico \@annoAccademico} \\
-         \vspace{12mm}
+         \vspace{30mm}
          {\large Laureando \\ \textbf{\@autore} \\ Matricola \@matricola} \\
          \vspace{5mm}
          {\large Relatore \\ \textbf{\@relatore}} \\
          \vspace{5mm}
          {\large Tutor \\ \textbf{\@tutor}} \\
    \end{center}
+   \vfill
    \newpage
 }
 
@@ -120,9 +120,12 @@
 }
 
 \newcommand{\generaIndice}{
-	\newpage
-	\tableofcontents
-	\clearpage
+   \newpage
+   % Salva lo stile corrente
+   \pagestyle{plain} % Nessuna intestazione, solo il numero in basso
+   \tableofcontents
+   \clearpage
+   \pagestyle{ruled} % Ripristina lo stile personalizzato
 }
 
 \RequirePackage[backref=page]{hyperref}
