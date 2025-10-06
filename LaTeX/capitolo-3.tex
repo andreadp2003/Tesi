@@ -2,8 +2,8 @@
 
 Il \textit{Ticket Management System} è un'applicazione che ha lo scopo di aiutare gli utenti nella creazione e gestione di ticket,
 creati per segnalare la presenza di problemi individuati nell'uso di un ipotetico sistema software, e nel loro inoltro a degli sviluppatori
-che possano analizzare e poi risolvere tali problemi. Funzionalità centrale dell'applicazione è il fatto che l'utente si interfaccia con un chatbot
-per usufruire dei servizi offerti.
+che possano analizzare e poi risolvere tali problemi. La funzionalità principale dell'applicazione risiede nella possibilità, per l'utente, 
+di interfacciarsi con un chatbot al fine di usufruire dei servizi offerti.
 
 Il \textit{Ticket Management System} è stato progettato come una \textit{solution} in C\# suddivisa, secondo un approccio modulare,
 in più progetti indipendenti ma interconnessi. Tale organizzazione riflette i principi delle moderne architetture software a livelli,
@@ -17,10 +17,10 @@ La composizione della solution prevede cinque progetti principali, ciascuno con 
 \section{Scelta del Large Language Model}
 In una prima bozza del progetto, l'LLM scelto per comunicare con l'utente era Claude Sonnet. Il progetto era stato configurato per rendere visibile i suoi
 tools all'applicazione Claude Desktop, cosicché potesse essere utilizzato direttamente all'interno del software in questione. La bozza ha avuto successo, ma
-essendo la solution pensata per essere integrata nell'ambiente cloud di Microsoft Azure, era indispensabile un differente LLM, uno in particolare che non fosse
+essendo la solution pensata per essere integrata nell'ambiente cloud di Microsoft Azure, era indispensabile un differente LLM, il Quale non fosse
 limitato a un programma esterno. \\
-È per questo che è stato scelto un chatbot interno all'ambiente Azure, ossia una risorsa Azure OpenAI \cite{azure_openai_foundry}, che mette a disposizione
-una serie di modelli proprietari di OpenAI, tra cui GPT-4.1, che è quello che è stato infine scelto per il progetto definitivo.
+Per questo motivo è stato scelto un chatbot interno all'ambiente Azure, ossia una risorsa Azure OpenAI \cite{azure_openai_foundry}, che mette a disposizione
+una serie di modelli proprietari di OpenAI, tra cui GPT-4.1, infine scelto per il progetto definitivo.
 
 \newpage
 \section{Progetti nella solution}
@@ -37,13 +37,13 @@ con l'utente. Tali classi sono:
         di un \texttt{Ticket}.
     \item \texttt{User}: gli utenti che usano il sistema; sono intesi anche gli sviluppatori che devono risolvere le \texttt{Task}.
 \end{itemize}
-Oltre alle classi però, il progetto definisce per ognuna dei DTO (\textit{Data Transfer Objects}) \cite{microsoft_webapi_ef_part5}.
-I DTO sono classi compatte che assomigliano alle classi originali ma che contengono meno informazioni, solo quelle ritenute necessarie.
+Oltre alle classi, il progetto definisce per ognuna dei DTO (\textit{Data Transfer Objects}) \cite{microsoft_webapi_ef_part5}.
+I DTO sono classi compatte che assomigliano alle classi originali ma che contengono meno informazioni, limitandosi a quelle ritenute necessarie.
 L'obiettivo è migliorare le performance legate al trasferimento dati tra i diversi sottosistemi, oltre a nascondere alcune logiche interne delle varie classi.
 
 \subsection{TM.Data}
 Il progetto \textit{TM.Data} ha il compito di gestire la persistenza delle informazioni, fornendo l'accesso al database
-ed archiviando gli oggetti creati. Il database è archiviato all'interno dell'ambiente cloud Azure e utilizza il linguaggio SQL.
+e archiviando gli oggetti creati. Il database è archiviato all'interno dell'ambiente cloud Azure e utilizza il linguaggio SQL.
 
 \subsection{TM.CQRS}
 Il progetto \textit{TM.CQRS} introduce l'implementazione del pattern \textit{Command Query Responsibility Segregation} \cite{azure_cqrs_msdocs}.
@@ -79,20 +79,20 @@ public async Task<TicketDtoCreate?> AggiungiTicketAsync(
 
 Questo metodo, come si può facilmente dedurre, permette di creare un oggetto \texttt{Ticket} (più precisamente un DTO \texttt{TicketDtoCreate}).
 Caratteristica del Model Context Protocol sono le decorazioni dei metodi fornite dal protocollo: \texttt{McpToolProperty} e \texttt{McpToolTrigger}. 
-Esse esplicitano i propri dettagli operativi in linguaggio naturale invece che in un linguaggio di programmazione, permettendo all'LLM di interpretare 
+Esse esplicitano i propri dettagli operativi in linguaggio naturale, invece che in un linguaggio di programmazione, permettendo all'LLM di interpretare 
 queste istruzioni e capire quali dei tool a sua disposizione utilizzare.
 
 Si osservi l'utilizzo di JSON all'interno del metodo: per comunicare all'LLM la struttura degli oggetti da creare, vengono forniti in input
 gli schemi JSON degli oggetti in questione. Nel frammento mostrato, lo schema è fornito tramite \texttt{DtoJsonSchemas.TicketDtoCreateSchema}
 nell'attributo \texttt{McpToolProperty}.
 
-Il parametro \texttt{ToolInvocationContext} nell'esempio fornisce il contesto dell'invocazione del tool:
+Il parametro \texttt{ToolInvocationContext}, nell'esempio, fornisce il contesto dell'invocazione del tool:
 rappresenta il punto di integrazione tra la chiamata esterna (o generata dall'LLM) e l'implementazione del metodo.
-La presenza di tale contesto e delle specifiche in linguaggio naturale nelle decorazioni facilita la correlazione tra le istruzioni fornite al modello
+La presenza di tale contesto, e delle specifiche in linguaggio naturale nelle decorazioni, facilita la correlazione tra le istruzioni fornite al modello
 e le operazioni concrete eseguite dall'applicazione.
 
-Questi elementi insieme mostrano come il Model Context Protocol consenta di esporre funzioni applicative al modello in modo strutturato:
-le descrizioni in linguaggio naturale rendono comprensibili i comportamenti dei tool all'LLM, mentre gli schemi JSON garantiscono che i dati prodotti
+Questi elementi insieme mostrano come il Model Context Protocol consenta di esporre funzioni applicative al modello in modo strutturato.
+Le descrizioni in linguaggio naturale rendono comprensibili i comportamenti dei tool all'LLM, mentre gli schemi JSON garantiscono che i dati prodotti
 rispettino le definizioni interne alla solution.
 
 \section{Esempio pratico}
@@ -167,9 +167,9 @@ Se hai bisogno di aggiungere commenti, task, o apportare modifiche al ticket, fa
 
 Come si evince dalla conversazione, l'LLM ha correttamente compreso quali sono i parametri dell'oggetto \texttt{Ticket}. Ogni qualvolta che viene
 inserito un parametro, il chatbot lo memorizza e passa a quello successivo, finché non ha ottenute tutte le informazioni necessarie per creare l'oggetto finale.
-Ha inoltre reperito l'informazione delle categorie già esistenti nel database. Si noti inoltre come, alla richiesta dell'utente di creare una nuova categoria invece di usarne una
-già esistente, l'LLM temporaneamente sospende la creazione del ticket per soddisfare tale richiesta e poi ritorna all'operazione iniziale. Questo dimostra una certa capacità
-di ritenere informazioni da poter usare in un secondo momento e di poter passare da un compito all'altro in modo fluido.
+Ha inoltre reperito l'informazione delle categorie già esistenti nel database. Si noti, inoltre, come alla richiesta dell'utente di creare una nuova categoria, invece di usarne una
+già esistente, l'LLM temporaneamente sospende la creazione del ticket per soddisfare tale richiesta e poi ritorna all'operazione iniziale. 
+Questo dimostra la capacità di poter passare da un compito all'altro in modo fluido.
 
 \newpage
 Come prova definitiva, seguono due screenshot del database sulla piattaforma Azure per osservare il contenuto della tabella \textit{dbo.Tickets} 
@@ -188,11 +188,13 @@ prima e dopo la conversazione di cui sopra.
 
 \newpage
 \section{Limitazioni}
-Le limitazioni del sistema sono sostanzialmente equiparabili a quelle degli LLM discusse in precedenza. Di particolare rilevanza nel nostro caso è la tendenza ad allucinare informazioni.
-Data la necessità di creare oggetti che siano conformi ai parametri stabili dalle classi del progetto, un errore in questo aspetto comprometterebbe il corretto funzionamento dell'intero sistema.
+Le limitazioni del sistema sono sostanzialmente equiparabili a quelle degli LLM discusse in precedenza. Di particolare rilevanza, nel nostro caso, 
+è la tendenza ad allucinare informazioni. Data la necessità di creare oggetti, che siano conformi ai parametri stabili dalle classi del progetto, 
+un errore in questo aspetto comprometterebbe il corretto funzionamento dell'intero sistema.
 
-Inoltre, il contesto a cui un LLM può far riferimento, la cosiddetta \textit{context window}, è circoscritto, ponendo un limite a quante informazioni possono essere gestite dal chatbot
-all'interno di una stessa conversazione prima che le sue capacità inizino a degradare \cite{ibm_context_window}. Questo può diventare particolarmente rilevante nel momento in cui il Ticket Management System verrà
-integrato in un sistema software più vasto, come viene meglio discusso nella conclusione di questa tesi, perché ciò richiederà al chatbot di gestire potenzialmente una grande quantità di informazioni.
-Potrebbe essere necessario sviluppare una procedura più sistematica e ottimizzata per acquisire le informazioni che necessita in un particolare momento oppure imporre
-una dimensione massima per le chat.
+Inoltre, il contesto a cui un LLM può far riferimento, la cosiddetta \textit{context window}, è circoscritto, ponendo un limite a quante informazioni 
+possono essere gestite dal chatbot all'interno di una stessa conversazione prima che le sue capacità inizino a degradare \cite{ibm_context_window}. 
+Questo può diventare particolarmente rilevante nel momento in cui il Ticket Management System verrà integrato in un sistema software più vasto, 
+come discusso nella conclusione di questa tesi, perché ciò richiederà al chatbot di gestire potenzialmente una grande quantità di 
+informazioni. Potrebbe essere necessario sviluppare una procedura più sistematica e ottimizzata per acquisire delle informazioni utili
+in un particolare momento oppure imporre una dimensione massima per le chat.

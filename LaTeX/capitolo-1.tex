@@ -13,12 +13,12 @@ Il linguaggio rappresenta uno strumento fondamentale per gli esseri umani, sia c
 sia come interfaccia per interagire con le macchine. Lo sviluppo di modelli linguistici sempre più potenti è stato quindi al centro
 della ricerca in \textit{Natural Language Processing} (NLP).
 
-Storicamente, si è passati da approcci statistici (basati su n-grammi e modelli probabilistici), a modelli neurali, con una struttura ispirata
+Storicamente, si è passati da approcci statistici (basati su n-grammi e modelli probabilistici) a modelli neurali, con una struttura ispirata
 a quella del cervello, fino ai modelli linguistici pre-addestrati (\textit{Pre-trained Language Models}, PLM).
 Questi ultimi, addestrati su grandi corpus testuali, hanno introdotto il concetto di rappresentazioni generali del linguaggio,
 successivamente adattabili tramite \textit{fine-tuning} a specifici compiti \cite{devlin2019bert}\cite{peters2018elmo}\cite{lewis2019bart}.
 
-Un punto di svolta è stato l'introduzione dei \textbf{\textit{Transformer}} \cite{chernyavskiy2021transformers},
+Un punto di svolta è stata l'introduzione dei \textbf{\textit{Transformer}} \cite{chernyavskiy2021transformers},
 che hanno reso possibile scalare i modelli a miliardi di parametri grazie al meccanismo di attenzione,
 alla parallelizzazione e alla disponibilità di hardware e dataset sempre più estesi.
 Questo ha portato alla nascita dei \textbf{Large Language Models} (LLM).
@@ -31,25 +31,26 @@ la struttura e il funzionamento dei \textit{Large Language Models} (LLM).
 
 \subsection{Panoramica}
 Il testo dell'utente, il cosiddetto \textit{prompt}, viene prima pre-processato e ridotto in \textit{token}, ossia frammenti più piccoli,
-i quali vengono poi trasformati in rappresentazioni numeriche che attraversano una rete neurale particolare chiamata Transformer, basata
-su meccanismi di attenzione, che restituisce un singolo token, che viene poi riconvertito in una parola. Il testo iniziale con l'aggiunta del token
-generato viene poi dato in input all'LLM per generare un nuovo token e così via. Infine, il modello viene addestrato, cioè i suoi parametri vengono
-strategicamente modificati, per generare risposte sensate e coerenti.
-Le diverse scelte in ciascuna di queste fasi (tokenizzazione, qualità dei dati, obiettivo di training, architettura)
+i quali vengono poi trasformati in rappresentazioni numeriche, oggetti matematici chiamati \textit{embeddings}, che attraversano una rete 
+neurale particolare chiamata Transformer, basata su meccanismi di attenzione, ottenendo come risultato un singolo token. Il testo iniziale, 
+con l'aggiunta del token generato, viene poi dato in input all'LLM per generare un nuovo token e così via, generando infine una risposta 
+al prompt dell'utente. Come ultimo passaggio, il modello viene addestrato, cioè i suoi parametri vengono automaticamente modificati, affinché le sue 
+risposte siano sensate e coerenti. \\
+Le diverse scelte in ciascuna di queste fasi, tokenizzazione, qualità dei dati, obiettivo di training e architettura,
 determinano in gran parte le capacità e i limiti del modello.
 
 \subsection{Tokenizzazione e pre-processing dei dati}
 La tokenizzazione \cite{webster1992tokenization} spezza il testo in unità elementari chiamate token: possono essere singoli caratteri,
 sottoparole \cite{kudo2018subword}, simboli \cite{sennrich2016neural} o parole complete. Prima della tokenizzazione
 si eseguono operazioni di pre-processing: filtraggio della qualità, deduplicazione e rimozione di informazioni sensibili.
-Un buon pre-processing dei dati riduce inoltre rumore, bias e contenuti non desiderati, migliorando la generalizzazione del modello.
+Inoltre, un buon pre-processing dei dati riduce: rumore, bias e contenuti non desiderati.
 
 \subsection{Il Transformer: principio e componenti fondamentali}
-Il Transformer è l'architettura alla base degli LLM moderni. Si basa su un principio chiamato \textit{self-attention} \cite{vaswani2017attention}:
-nel rappresentare matematicamente i token del prompt, trasformandoli in oggetti chiamati \textit{embeddings}, si tiene conto non solo della parola
-isolata ma anche dell'intera frase nella quale si trova, aggiungendo così il contesto.
+Il Transformer è l'architettura alla base degli LLM moderni. Si basa su un meccanismo chiamato \textit{self-attention} \cite{vaswani2017attention},
+attraverso il quale, nella trasformazione dei token in embeddings, si tiene conto non solo della parola
+in sé ma anche dell'intera frase nella quale si trova, codificando così l'informazione del contesto.
 
-Ci sono poi diverse tipologie di Transformer:
+Ci sono diverse tipologie di Transformer:
 \begin{itemize}
     \item \textbf{\textit{Encoder-decoder}}: due parti separate, una legge l'input (\textit{encoder}) e l'altra genera l'output (\textit{decoder}).
     Utile per traduzione o riassunti.
@@ -62,15 +63,14 @@ Ci sono poi diverse tipologie di Transformer:
 Il ciclo di vita di un LLM si articola tipicamente in tre fasi principali:
 \begin{enumerate}
     \item \textbf{Pre-training}: apprendimento auto-supervisionato su grandi corpus testuali per acquisire conoscenze linguistiche generali.
-    \item \textbf{Fine-tuning / Alignment}: adattamento a compiti specifici o preferenze umane.
-    \item \textbf{Prompting / Utilizzo}: impiego diretto tramite prompt.
+    \item \textbf{Fine-tuning/Alignment}: adattamento a compiti specifici o preferenze umane.
+    \item \textbf{Prompting/Utilizzo}: impiego diretto tramite prompt.
 \end{enumerate}
 
 \newpage
 \section{\textit{Pre-training}}
-
-Il \textbf{\textit{pre-training}} è la fase cruciale che consente ai Large Language Models (LLM) di acquisire conoscenza linguistica generale e capacità di 
-rappresentazione del testo prima di qualsiasi adattamento specifico.
+Nella fase di \textbf{\textit{pre-training}} i Large Language Models (LLM) acquisiscono una conoscenza linguistica generale e una capacità di 
+rappresentazione del testo, prima di qualsiasi adattamento specifico.
 
 \subsection{Obiettivi di pre-training}
 Gli obiettivi di addestramento definiscono cosa il modello apprende:
@@ -129,10 +129,10 @@ Gli LLM vengono ottimizzati per comprendere e seguire istruzioni in linguaggio n
 Il \textbf{RLHF} \cite{ziegler2019fine} rappresenta una tecnica fondamentale per allineare i modelli alle preferenze umane.
 \begin{enumerate}
     \item Si raccoglie un dataset di risposte generate dal modello valutate da esseri umani.
-    \item Si addestra un modello di reward che impara a prevedere la valutazione di cui prima.
+    \item Si addestra un modello di reward, che impara a valutare come un essere umano.
     \item L'LLM viene ulteriormente ottimizzato con tecniche di reinforcement learning.
 \end{enumerate}
-Questo approccio è stato utilizzato, ad esempio, per ChatGPT.
+Questo approccio è stato utilizzato, ad esempio, per ChatGPT .
 
 \subsection{\textit{Domain Adaptation}}
 Gli LLM possono essere specializzati in domini specifici:
@@ -146,14 +146,11 @@ Gli LLM possono essere specializzati in domini specifici:
 Per garantire sicurezza, utilità e rispetto delle preferenze etiche,
 si introducono strategie di \textit{alignment}:
 \begin{itemize}
-    \item \textbf{\textit{Constitutional AI}}: uso di principi predefiniti come linee guida per il comportamento del modello.
-    \item \textbf{\textit{Self-critique} e revisione}: i modelli generano e valutano autonomamente le proprie risposte. \cite{touvron2023llama2}\cite{ouyang2022rlhf}
+    \item \textbf{\textit{Constitutional AI}}: uso di principi predefiniti come linee guida per il comportamento del modello. Questa tecnica
+    è utilizzata da Anthropic \cite{anthropic_claude_constitution}.
+    \item \textbf{\textit{Self-critique} e revisione}: i modelli generano e valutano autonomamente le proprie risposte \cite{touvron2023llama2}\cite{ouyang2022rlhf}.
 \end{itemize}
 
-\widefigure[1.2\textwidth]
-    {../figure/llms-stages.png}{
-        \cite{arxiv230706435}
-    }{fig:llms-stages}
 
 \newpage
 \section{Tecniche di Prompting e In-Context Learning}
@@ -174,11 +171,11 @@ Questo comportamento è noto come \textbf{\textit{in-context learning}} (ICL) \c
 
 \subsection{Prompt Engineering}
 La formulazione del prompt influenza drasticamente la qualità delle risposte.
-Sono dunque emerse tecniche sistematiche di \textbf{prompt engineering}:
+Sono dunque emerse tecniche sistematiche di \textbf{\textit{prompt engineering}}:
 \begin{itemize}
-    \item \textbf{Instruction-style prompts}: forniscono istruzioni chiare e contestualizzate.
-    \item \textbf{Template-based prompting}: utilizzo di schemi predefiniti per generare input coerenti.
-    \item \textbf{Role prompting}: assegnazione di un "ruolo" al modello (e.g. "Sei un medico con decenni di esperienza…").
+    \item \textbf{\textit{Instruction-style prompts}}: forniscono istruzioni chiare e contestualizzate.
+    \item \textbf{\textit{Template-based prompting}}: utilizzo di schemi predefiniti per generare input coerenti.
+    \item \textbf{\textit{Role prompting}}: assegnazione di un "ruolo" al modello (e.g. "Sei un medico con decenni di esperienza…").
 \end{itemize}
 
 \subsection{Prompting per il Ragionamento}
@@ -209,12 +206,17 @@ Sono state sviluppate ulteriori strategie per aumentare l'affidabilità:
     per fornire contesto aggiornato e ridurre le allucinazioni.
 \end{itemize}
 
+\widefigure[1.2\textwidth]
+    {../figure/llms-stages.png}{
+        Un diagramma di flusso semplificato che illustra le varie fasi degli LLM, dal pre-training all'utilizzo. 
+        È possibile sollecitare gli LLM a generare risposte in diverse fasi dell'addestramento, come nel pre-training o nel fine-tuning
+        \cite{arxiv230706435}.
+    }{fig:llms-stages}
+
 \newpage
 \section{Applicazioni}
-I \textbf{Large Language Models} (LLM) hanno trovato applicazioni in un'ampia gamma di domini, 
-dalla generazione di linguaggio naturale alla programmazione, 
-dalla ricerca scientifica alla medicina. 
-Questo capitolo presenta le principali aree di utilizzo e gli scenari emergenti.
+I \textbf{Large Language Models} (LLM) hanno trovato applicazione in un'ampia gamma di domini, 
+dalla generazione di linguaggio naturale alla programmazione, dalla ricerca scientifica alla medicina. 
 
 \subsection{Generazione e Comprensione del Linguaggio Naturale}
 Gli LLM eccellono in compiti tradizionali di NLP:
@@ -223,17 +225,17 @@ Gli LLM eccellono in compiti tradizionali di NLP:
     performance vicine ai sistemi dedicati.
     \item \textbf{Riassunto testuale}: generazione di sintesi coerenti e concise da testi lunghi.
     \item \textbf{Parafrasi e riformulazione}: utile per la scrittura assistita e l'elaborazione creativa.
-    \item \textbf{Conversazione e chatbot}: applicazioni come \textit{ChatGPT} e Claude 
+    \item \textbf{Conversazione e chatbot}: applicazioni come ChatGPT e Claude 
     forniscono assistenza virtuale multi-dominio.
 \end{itemize}
 
 \subsection{Programmazione e Ingegneria del Software}
 Gli LLM specializzati sul codice hanno mostrato grande impatto nello sviluppo software:
 \begin{itemize}
-    \item \textbf{Code completion}: completamento automatico di funzioni e snippet.
-    \item \textbf{Code generation}: traduzione da linguaggio naturale a codice eseguibile.
-    \item \textbf{Code explanation e refactoring}: spiegazione e ottimizzazione di codice esistente.
-    \item Strumenti come \textit{Codex}, \textit{Copilot} e \textit{AlphaCode} hanno reso accessibile 
+    \item \textbf{\textit{Code completion}}: completamento automatico di funzioni e snippet.
+    \item \textbf{\textit{Code generation}}: traduzione da linguaggio naturale a codice eseguibile.
+    \item \textbf{\textit{Code explanation e refactoring}}: spiegazione e ottimizzazione di codice esistente.
+    \item Strumenti come Codex, Copilot e AlphaCode hanno reso accessibile 
     la programmazione anche a utenti non esperti.
 \end{itemize}
 
@@ -298,8 +300,6 @@ Un campo emergente riguarda l'integrazione degli LLM in agenti autonomi:
 
 Nonostante i notevoli progressi, gli LLM presentano ancora
 numerose sfide tecniche, limitazioni pratiche e rischi etici.
-Questo capitolo esamina i principali problemi legati alla loro adozione
-e le preoccupazioni sociali connesse al loro utilizzo.
 
 \subsection{Allucinazioni e Aderenza ai Fatti}
 Gli LLM spesso generano contenuti plausibili ma falsi, un fenomeno noto come \textbf{allucinazioni}.
